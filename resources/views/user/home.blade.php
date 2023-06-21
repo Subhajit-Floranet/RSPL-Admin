@@ -12,6 +12,7 @@
             <p>{{Auth::guard('web')->user()->name}}</p>
             <p>{{Auth::guard('web')->user()->email}}</p>
             <p>Testing for GitHUB</p>
+            <p>Testing for GitHUB</p>
             <p>
                 <a href="{{route('user.logout')}}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">LOGOUT</a>
                 
