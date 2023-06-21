@@ -23,13 +23,13 @@
                     @csrf
                     <div class="lpr-user-name">
                         <label><i class="fa fa-user"></i> Email</label>
-                        <input type="text" id="email" name="email" value="{{old('email')}}" placeholder="Type your email address">
+                        <input type="text" id="email" name="email" value="{{old('email')}}" placeholder="Type your Email Address">
                         <span class="text-danger">@error('email'){{$message}}@enderror</span>
                     </div>
                     <br><br>
                     <div class="lpr-password">
                         <label><i class="fa fa-lock"></i> Password</label>
-                        <input type="password" id="password" name="password" placeholder="Type your password">
+                        <input type="password" id="password" name="password" placeholder="Type Your Password">
                         <span class="text-danger">@error('password'){{$message}}@enderror</span>
     
                         {{-- <p class="forgot-pass"><a href="#">Forgot Password?</a></p> --}}
