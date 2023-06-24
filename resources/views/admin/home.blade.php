@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <p>{{Auth::guard('admin')->user()->name}}</p>
-            <p>
-                <a href="{{route('admin.logout')}}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">LOGOUT</a>
-                <form id="logout-form" action="{{route('admin.logout')}}" method="POST">
-                    @csrf
-                </form>
-            </p>
-        </div>
+@extends('layouts.admin.app')
+
+@section('content')
+
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+<div class="row">
+    <div class="col-12 d-flex no-block align-items-center">
+        <h4 class="page-title">Dashboard</h4>
     </div>
-</body>
-</html>
+</div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+
+    <div class="row">
+        DASHBOARD
+    </div>
+    
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+
+
+
+@endsection
