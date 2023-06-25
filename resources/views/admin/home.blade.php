@@ -20,6 +20,7 @@
 <div class="container-fluid">
 
     <div class="row">
+        {{Auth::guard('admin')->user()->name}}
         DASHBOARD
     </div>
     
