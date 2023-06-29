@@ -5,6 +5,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
 
 use App\Http\Controllers\Admin\GBGCmsController;
+use App\Http\Controllers\Admin\GBGCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,15 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::any('/edit/{id}', [GBGCmsController::class, 'edit'])->name('edit');
                 Route::get('/delete/{id}', [GBGCmsController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGCmsController::class, 'status'])->name('status');
+            });
+
+            Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
+                Route::any('/', [GBGCategoryController::class, 'list'])->name('list');
+                Route::any('/add', [GBGCategoryController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGCategoryController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGCategoryController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGCategoryController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGCategoryController::class, 'deleteimage'])->name('deleteimage');
             });
 
         });
