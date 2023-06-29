@@ -56,7 +56,7 @@
                             <input type="file" class="form-control" id="cimage" name="cimage">
                             <p>Please upload minimum 1920px X 308px image only</p>
                             @if ($dataDetails->image!='')
-                                <img src="{{asset('uploads/banner/'.$dataDetails->image) }}" style="width: 30%; height: 100px">&nbsp;&nbsp;<a href="{{route('admin.'.$websiteShortCode.'.category.deleteimage', [base64_encode($dataDetails->id)])}}" class="btn btn-danger">Delete Image</a>
+                                <img src="{{asset('uploads/banner/'.$dataDetails->image) }}" style="width: 30%; height: 100px">&nbsp;&nbsp;<a href="{{route('admin.'.$websiteShortCode.'.category.deleteimage', [base64_encode($dataDetails->id)])}}" ><i class="mdi mdi-delete-forever"></i></a>
                             @endif
                         </div>
                         <div class="form-group m-t-20">
