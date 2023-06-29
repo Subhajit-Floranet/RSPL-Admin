@@ -86,9 +86,9 @@
                             <input type="text" id="to_price" name="to_price" placeholder="To Price" value="@if($pricedtl != ''){{$pricedtl->to_price}}@endif">&nbsp;&nbsp;
                                 <select id="equation" name="equation">
                                        <option value="">Select Option</option>
-                                       <option value="between" @if ($pricedtl != '') and ($pricedtl->equation=="between") selected @endif>Between</option>
-                                       <option value="greater" @if ($pricedtl != '') and ($pricedtl->equation=="greater") selected @endif>Greater</option>
-                                       <option value="less"    @if ($pricedtl != '') and ($pricedtl->equation=="less") selected @endif>Less</option>
+                                       <option value="between" @if (($pricedtl != '') and ($pricedtl->equation=="between")) selected @endif>Between</option>
+                                       <option value="greater" @if (($pricedtl != '') and ($pricedtl->equation=="greater")) selected @endif>Greater</option>
+                                       <option value="less"    @if (($pricedtl != '') and ($pricedtl->equation=="less")) selected @endif>Less</option>
                                 </select>
                             </p>
                          </div>
