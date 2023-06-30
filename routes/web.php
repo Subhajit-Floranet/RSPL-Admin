@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminController;
 
 use App\Http\Controllers\Admin\GBGCmsController;
 use App\Http\Controllers\Admin\GBGCategoryController;
+use App\Http\Controllers\Admin\GBGFalseUrlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,15 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/delete/{id}', [GBGCategoryController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGCategoryController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGCategoryController::class, 'deleteimage'])->name('deleteimage');
+            });
+
+            Route::group(['prefix' => 'falseurl', 'as' => 'falseurl.'], function () {
+                Route::any('/', [GBGFalseUrlController::class, 'list'])->name('list');
+                Route::any('/add', [GBGFalseUrlController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGFalseUrlController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGFalseUrlController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGFalseUrlController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGFalseUrlController::class, 'deleteimage'])->name('deleteimage');
             });
 
         });

@@ -10,7 +10,7 @@
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Category</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.category.add') }}" class="btn btn-success">ADD Category</a>
+                <a href="{{ route('admin.'.$websiteShortCode.'.falseurl.add') }}" class="btn btn-success">ADD FalseUrl</a>
             </div>
         </div>
     </div>
@@ -46,8 +46,8 @@
                                 <tr>
                                     <td>{{ $i + $key }}</td>
                                     <td>{{$data->name}}</td>
-                                    <td>{{$data->slug}}</td>
-                                    <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>...</td>!-->
+                                    <td>{{$data->slug_url}}</td>
+                                    <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>!-->
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
                                         <label class="switch">
@@ -57,10 +57,10 @@
                                         <label id="status-info-{{ $data->id }}" class="status-stat"></label>
                                     </td>
                                     <td >
-                                        <a href="{{ route('admin.'.$websiteShortCode.'.category.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
+                                        <a href="{{ route('admin.'.$websiteShortCode.'.falseurl.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a onclick="return confirm('Are you sure you want to delete the Category?')" href="{{ route('admin.'.$websiteShortCode.'.category.delete', base64_encode($data->id)) }}">
+                                        <a onclick="return confirm('Are you sure you want to delete the FalseUrl?')" href="{{ route('admin.'.$websiteShortCode.'.falseurl.delete', base64_encode($data->id)) }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
@@ -101,7 +101,7 @@
 				status = 'N'
 			}
 			id = $(this).attr('data-id');
-			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.category.status') }}";	
+			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.falseurl.status') }}";	
 			//alert(ajaxurl);
 			$.ajax({
 				type : 'POST',

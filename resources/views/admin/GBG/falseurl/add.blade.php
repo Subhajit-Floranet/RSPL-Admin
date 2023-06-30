@@ -9,15 +9,16 @@
 <script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 <script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
 
+<body onload="myFunction()">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} CATEGORY</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Create False URL</h4>
             <div class="ml-auto text-right">
                 <a href="{{ route('admin.'.$websiteShortCode.'.category.list') }}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
-    </div>
+      </div>
 </div>
 
 <div class="container-fluid">
@@ -32,95 +33,80 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
-                <form action="{{route('admin.'.$websiteShortCode.'.category.edit', [base64_encode($dataDetails->id)])}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
+                <form action="{{route('admin.'.$websiteShortCode.'.falseurl.add')}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title">Category Edit</h4>
-                        
-                        <input type="hidden" name="formid" value="<?php echo $dataDetails->id; ?>">
+                        <h4 class="card-title">Create False URL</h4>
 
-                        <?php //die; ?>
-                        
                         <div class="form-group m-t-20">
-                            <label>Category Title<span>*</span></label>
-                            <input type="text" class="form-control" id="ctitle" name="ctitle" value="{{$dataDetails->name}}" placeholder="Enter Category Title" required>
+                            <label>False URL<span>*</span></label>
+                          <div><input type="text" id="falseurllink" name="falseurllink" class="form-control" value="falseurl"></div><input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter False Extension" required>
                         </div>
                         <div class="form-group m-t-20">
-                            <label>Category Page Head<span>*</span></label>
-                            <input type="text" class="form-control" id="chead" name="chead" value="{{$dataDetails->page_head}}" placeholder="Enter Category Page Heading" required>
+                            <label>Category<span>*</span></label>
+                            <select id="category" name="category" class="form-control" required>
+                                <!-- @foreach($catdata as $key => $category)
+                                    <option value="{{$key}}">{{$category}}</option>
+                                @endforeach -->
+                                @foreach($catdata as $c)
+                                    <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endforeach
+                            </select>
+                            
                         </div>
                         <div class="form-group m-t-20">
                             <label>Image</label>
-                            <input type="file" class="form-control" id="cimage" name="cimage">
-                            <p>Please upload minimum 1920px X 308px image only</p>
-                            @if ($dataDetails->image!='')
-                                <img src="{{asset('uploads/banner/'.$dataDetails->image) }}" style="width: 30%; height: 100px">&nbsp;&nbsp;<a href="{{route('admin.'.$websiteShortCode.'.category.deleteimage', [base64_encode($dataDetails->id)])}}" class="btn btn-danger">Delete Image</a>
-                            @endif
+                            <input type="file" class="form-control" id="fimage" name="fimage"  >
+                            <p>Please upload minimum 1500px X 400px image only</p>
+                        </div>
+                        <div class="form-group m-t-20">
+                            <label>Banner Alt</label>
+                            <input type="text" class="form-control" id="baneeralt" name="banneralt" placeholder="Enter Banner ALT" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Banner Heading</label>
-                            <input type="text" class="form-control" id="cbannerhead" name="cbannerhead" value="{{$dataDetails->banner_heading}}" placeholder="Enter Banner Heading" required>
+                            <input type="text" class="form-control" id="baneeheading" name="bannerheading" placeholder="Enter Banner Heading" required>
                         </div>
-                        
-                        <div class="form-group m-t-20">
-                            <label>Menu Head Only<span>*</span></label>
-                            <p><input type="radio" class="form-control2" id="cmenuhead" name="cmenuhead" {{$dataDetails->menu_head_only == 'N' ? 'checked' : ''}} value="N" >No</p>
-                            <p><input type="radio" class="form-control2" id="cmenuhead" name="cmenuhead" {{$dataDetails->menu_head_only == 'Y' ? 'checked' : ''}} value="Y" >Yes</p>
-                        </div>
-                       
-                        <input type="hidden" name="cattype" id="cattype" value="{{$dataDetails->cat_section}}">
-                       
-                        <div class="form-group m-t-20">
-                            <label>Category Type<span>*</span></label>
-                            <p><input type="radio" class="form-control2 ctype"  name="ctype" {{$dataDetails->cat_section == 'N' ? 'checked' : ''}} value="N" checked required>Category/Occasion Related</p>
-                            <p><input type="radio" class="form-control2 ctype" name="ctype" {{$dataDetails->cat_section == 'P' ? 'checked' : ''}}  value="P" required>Price Related</p>
-                        </div>
-
-
-                        
-                        <div class="form-group m-t-20 price-range" style="display:none">
-                            <label>Price Details(Please put value USD currency)</label>
-                            <p><input type="text" id="from_price" name="from_price" placeholder="From Price" value="@if($pricedtl != ''){{$pricedtl->from_price}}@endif ">&nbsp;&nbsp; 
-                            <input type="text" id="to_price" name="to_price" placeholder="To Price" value="@if($pricedtl != ''){{$pricedtl->to_price}}@endif">&nbsp;&nbsp;
-                                <select id="equation" name="equation">
-                                       <option value="">Select Option</option>
-                                       <option value="between" @if (($pricedtl != '') and ($pricedtl->equation=="between")) selected @endif>Between</option>
-                                       <option value="greater" @if (($pricedtl != '') and ($pricedtl->equation=="greater")) selected @endif>Greater</option>
-                                       <option value="less"    @if (($pricedtl != '') and ($pricedtl->equation=="less")) selected @endif>Less</option>
-                                </select>
-                            </p>
-                         </div>
-
-
-
                         <div class="form-group m-t-20">
                             <label>Content Top</label>
-                            <textarea class="form-control" rows="5" id="ccontenttop" name="ccontenttop" placeholder="Enter Content Top" required>{{$dataDetails->content_top}}</textarea>
+                            <textarea class="form-control" rows="5" id="falseurlcontenttop" name="falseurlcontenttop" placeholder="Enter Content Top" required></textarea>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Content Bottom</label>
-                            <textarea class="form-control" rows="5" id="ccontentbottom" name="ccontentbottom" placeholder="Enter Content Bottom" required>{{$dataDetails->content_bottom}}</textarea>
+                            <textarea class="form-control" rows="5" id="falseurlcontentbottom" name="falseurlcontentbottom" placeholder="Enter Content Bottom" required></textarea>
+                        </div>
+                        <div class="form-group m-t-20">
+                            <label>Product Sort Order<span>*</span></label>
+                            <select id="productsordr"  name="productsorder" class="form-control" required>
+                                <!-- @foreach($catdata as $key => $category)
+                                    <option value="{{$key}}">{{$category}}</option>
+                                @endforeach -->
+                                @foreach($orderdata as $od)
+                                    <option value="{{$od->id}}">{{$od->name}}</option>
+                                @endforeach
+                            </select>
+                            
                         </div>
                         <div class="form-group m-t-20">
                             <label>Meta Title</label>
-                            <input type="text" class="form-control" id="cmeta_title" name="cmeta_title" value="{{$dataDetails->meta_title}}" placeholder="Enter Meta Title" required>
+                            <input type="text" class="form-control" id="falseurlmeta_title" name="falseurlmeta_title" placeholder="Enter Meta Title" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Meta Description</label>
-                            <textarea class="form-control" rows="5" id="cmeta_description" name="cmeta_description" placeholder="Enter Meta Description" required>{{$dataDetails->meta_description}}</textarea>
+                            <textarea class="form-control" rows="5" id="falseurlmeta_description" name="falseurlmeta_description" placeholder="Enter Meta Description" required></textarea>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Tagline</label>
-                            <input type="text" class="form-control" id="ctagline" name="ctagline" value="{{$dataDetails->tag_line}}" placeholder="Enter Tagline" required>
+                            <input type="text" class="form-control" id="falseurltagline" name="falseurltagline" placeholder="Enter Tagline" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Top Head</label>
-                            <input type="text" class="form-control" id="ctophead" name="ctophead" value="{{$dataDetails->tophead}}" placeholder="Enter Tophead" required>
+                            <input type="text" class="form-control" id="falseurltophead" name="falseurltophead" placeholder="Enter Tophead" required>
                         </div>
                     </div>
                     <div class="border-top">
                         <div class="card-body">
-                            <input class="btn btn-primary" type="submit" value="UPDATE">
+                            <input class="btn btn-primary" type="submit" value="CREATE">
                         </div>
                     </div>
                 </form>
@@ -128,7 +114,7 @@
         </div>
     </div>
 </div>
-
+</body>
 <script type="text/javascript">
 
     
@@ -153,7 +139,7 @@
           });
     });
 
-    /Tinymce editor/
+    /*Tinymce editor*/
     if ($("#ccontenttop").length) {
         tinymce.init({
             selector: '#ccontenttop',
@@ -228,10 +214,11 @@
             //}
         }
     });
+       
 
-    
 
-    $('.ctype').click(function(){
+
+        $('.ctype').click(function(){
         //alert(this.value);
         if(this.value == 'P'){
             $('.price-range').show();
@@ -246,20 +233,12 @@
         }
        
     })
-
-    if($('#cattype').val() == 'P'){
-        $('.price-range').show();
-        $('#from_price').attr('required', true);
-        $('#to_price').attr('required', true);
-        $('#equation').attr('required', true);
-    }else{
-        $('.price-range').hide();
-        $('#from_price').removeattr('required', true);
-        $('#to_price').removeattr('required', true);
-        $('#equation').removeattr('required', true);
-    }
+  
+    
+    
+   
 
 
-</script>     
+</script>    
 
 @endsection
