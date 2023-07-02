@@ -40,7 +40,6 @@ class GBGFalseUrlController extends CommonController
         return view('admin.GBG.falseurl.list', ['result' => $result,  'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
 
-    
     public function add(Request $request){
 
         if($this->checkPermission('falseurl','list') == false && $this->checkSuperPermission('falseurl','list') == false ){
@@ -136,8 +135,8 @@ class GBGFalseUrlController extends CommonController
         $websiteShortCode = 'gbg';
         $pricedtl = $imageName = '';
 
-        $id = base64_decode($id);
-		$dataDetails  = GBGFalseUrl::where('id',$id)->first();
+         $id = base64_decode($id);
+		 $dataDetails  = GBGFalseUrl::where('id',$id)->first();
 
         // $dataPriceBrand = GBGPriceBrand::where('category_id', $id)->first();
 
@@ -147,76 +146,82 @@ class GBGFalseUrlController extends CommonController
         //     $pricedtl = '';
         // }
         
-        // $obj = new GBGCategory;
-
-        // if($request->isMethod('POST')){
-        //     //dd($request);
-        //     $request->validate([
-        //         'ctitle'=>'required',
-        //         'chead'=>'required',
-        //         'cbannerhead'=>'required',
-        //         'ccontenttop'=>'required',
-        //         'ccontentbottom'=>'required',
-        //         'cmeta_title'=>'required',
-        //         'cmeta_description'=>'required',
-        //         'ctagline'=>'required',
-        //         'ctophead'=>'required'
-        //     ]);
+        $obj = new GBGFalseUrl;
+         
+        if($request->isMethod('POST')){
+            //dd($request);
+            $request->validate([
+                'falseurl'=>'required',
+                'category'=>'required',
+                'banneralt'=>'required',
+                'bannerheading'=>'required',
+                'falseurlcontenttop'=>'required',
+                'falseurlcontentbottom'=>'required',
+                'productsorder'=>'required',
+                'falseurlmeta_title'=>'required',
+                'falseurlmeta_description'=>'required',
+                'falseurltagline'=>'required',
+                'falseurltophead'=>'required'
+            ]);
             
-        //     $imagefile=$request->file("cimage");
-        //     if (isset($imagefile)){
-        //         $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
-        //         $imagefile->move(public_path() . '/uploads/banner/', $imageName);
-        //     }
+            // $imagefile=$request->file("cimage");
+            // if (isset($imagefile)){
+            //     $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
+            //     $imagefile->move(public_path() . '/uploads/banner/', $imageName);
+            // }
+            $a = 0;
+            $formid=$request->formid;
 
-        //     $formid=$request->formid;
+            $update_arr['country_id'] = $a;
+            $update_arr['slug_url'] = $request->falseurl;
+            $update_arr['category_id'] = $request->category;
+            //$update_arr['image'] = $imageName;
+            $update_arr['banner_img_alt'] = $request->banneralt;
+            $update_arr['banner_heading'] = $request->bannerheading;
+            $update_arr['content_top'] = $request->falseurlcontenttop;
+            $update_arr['content_bottom'] = $request->falseurlcontentbottom;
+            $update_arr['sort_order'] = $request->productsorder;
+            $update_arr['meta_title'] = $request->falseurlmeta_title;
+            $update_arr['meta_description'] = $request->falseurlmeta_description;
+            $update_arr['tag_line'] = $request->falseurltagline;
+            $update_arr['tophead'] = $request->falseurltophead;  
 
-        //     $update_arr['name'] = $request->ctitle;
-        //     $update_arr['page_head'] = $request->chead;
-        //     $update_arr['image'] = $imageName;
-        //     $update_arr['banner_heading'] = $request->cbannerhead;
-        //     $update_arr['menu_head_only'] = $request->cmenuhead;
-        //     $update_arr['cat_section'] = $request->ctype;
-        //     $update_arr['content_top'] = $request->ccontenttop;
-        //     $update_arr['content_bottom'] = $request->ccontentbottom;
-        //     $update_arr['meta_title'] = $request->cmeta_title;
-        //     $update_arr['meta_description'] = $request->cmeta_description;
-        //     $update_arr['tag_line'] = $request->ctagline;
-        //     $update_arr['tophead'] = $request->ctophead;  
+            // $dataPriceBrandUpd= GBGPriceBrand::where('category_id', $formid)->first();
+
+            // if ($request->ctype=="P"){
+            //     if($dataPriceBrandUpd){
+            //         $dataPriceBrandUpd->from_price=$request->from_price;
+            //         $dataPriceBrandUpd->to_price=$request->to_price;
+            //         $dataPriceBrandUpd->equation=$request->equation;
+            //         $dataPriceBrandUpd->update();
+            //     }else{
+            //         $obj2 = new GBGPriceBrand();
+            //         $obj2->category_id=$formid;
+            //         $obj2->from_price=$request->from_price;
+            //         $obj2->to_price=$request->to_price;
+            //         $obj2->equation=$request->equation;
+            //         $obj2->save();
+            //     }
+            // }else{
+            //     if($dataPriceBrandUpd){
+            //        $object=GBGPriceBrand::where('id', $dataPriceBrandUpd->id)->delete();
+            //     }
+            // }
             
-        //     $dataPriceBrandUpd= GBGPriceBrand::where('category_id', $formid)->first();
-
-        //     if ($request->ctype=="P"){
-        //         if($dataPriceBrandUpd){
-        //             $dataPriceBrandUpd->from_price=$request->from_price;
-        //             $dataPriceBrandUpd->to_price=$request->to_price;
-        //             $dataPriceBrandUpd->equation=$request->equation;
-        //             $dataPriceBrandUpd->update();
-        //         }else{
-        //             $obj2 = new GBGPriceBrand();
-        //             $obj2->category_id=$formid;
-        //             $obj2->from_price=$request->from_price;
-        //             $obj2->to_price=$request->to_price;
-        //             $obj2->equation=$request->equation;
-        //             $obj2->save();
-        //         }
-        //     }else{
-        //         if($dataPriceBrandUpd){
-        //            $object=GBGPriceBrand::where('id', $dataPriceBrandUpd->id)->delete();
-        //         }
-        //     }
-            
-        //     if(GBGCategory::where(['id' => $request->formid])->update($update_arr)){
+            if(GBGFalseUrl::where(['id' => $request->formid])->update($update_arr)){
                    
-        //         $request->session()->flash('alert-success', 'Catgory successfully updated.');
-        //         return redirect()->route('admin.gbg.category.list');
-        //     }else{
-        //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-        //         return redirect()->back()->with($request->except(['_method', '_token']));
-        //     }
-        // }
-         return view('admin.GBG.falseurl.edit', ['dataDetails' => $dataDetails, 'request' => $request, 'websiteShortCode' => $websiteShortCode, 'pricedtl' => $pricedtl]);
+                $request->session()->flash('alert-success', 'FalseUrl successfully updated.');
+                return redirect()->route('admin.gbg.falseurl.list');
+            }else{
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back()->with($request->except(['_method', '_token']));
+            }
+        }
+        $catdata=GBGCategory::all();
+        $orderdata=GBGFalseUrlProductSort::all();
+         return view('admin.GBG.falseurl.edit', ['dataDetails' => $dataDetails, 'catdata' => $catdata, 'orderdata' => $orderdata, 'request' => $request, 'websiteShortCode' => $websiteShortCode, 'pricedtl' => $pricedtl]);
     }
+
 
     public function delete($id = null, Request $request)
     {

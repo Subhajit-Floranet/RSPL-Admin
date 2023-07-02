@@ -8,7 +8,7 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Category</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} FalseUrl</h4>
             <div class="ml-auto text-right">
                 <a href="{{ route('admin.'.$websiteShortCode.'.falseurl.add') }}" class="btn btn-success">ADD FalseUrl</a>
             </div>
@@ -26,15 +26,15 @@
                             <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                         @endif
                     @endforeach
-                    <h5 class="card-title">Category</h5>
+                    <h5 class="card-title">False Url</h5>
                     @if(count($result) > 0)
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 5%"><b>No.</b></th>
-                                    <th style="width: 5%"><b>Name</b></th>
                                     <th style="width: 35%"><b>Slug</b></th>
+                                    <th style="width: 5%"><b>Category</b></th>
                                     <th style="width: 20%"><b>Created Date</b></th>
                                     <th style="width: 6%"><b>Status</b></th>
                                     <th style="width: 9%"></th>
@@ -45,8 +45,8 @@
                                 @foreach($result as $key => $data)
                                 <tr>
                                     <td>{{ $i + $key }}</td>
+                                    <td>http://www.gbg.de/{{$data->slug_url}}</td>
                                     <td>{{$data->name}}</td>
-                                    <td>{{$data->slug_url}}</td>
                                     <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>!-->
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>

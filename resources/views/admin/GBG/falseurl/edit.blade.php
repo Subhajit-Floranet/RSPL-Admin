@@ -13,9 +13,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Create False URL</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Edit False URL</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.category.list') }}" class="btn btn-outline-info">Back</a>
+                <a href="{{ route('admin.'.$websiteShortCode.'.falseurl.list') }}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
       </div>
@@ -33,24 +33,25 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
-                <form action="{{route('admin.'.$websiteShortCode.'.falseurl.add')}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
+                <form action="{{route('admin.'.$websiteShortCode.'.falseurl.edit')}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title">Create False URL</h4>
-
+                        <h4 class="card-title">Edit False URL</h4>
+                        
+                        <input type="hidden" name="formid" value="<?php echo $dataDetails->id; ?>">
                         <div class="form-group m-t-20">
                             <label>False URL<span>*</span></label>
-                          <div><input type="text" id="falseurllink" name="falseurllink" class="form-control" value="falseurl"></div><input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter False Extension" required>
+                            <div>http://www.gbg.de</div><input type="text" class="form-control" id="falseurl" name="falseurl" value="{{$dataDetails->slug_url}}" placeholder="Enter False Extension" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Category<span>*</span></label>
-                            <select id="category" name="category" class="form-control" required>
-                                <!-- @foreach($catdata as $key => $category)
+                            <select id="category" name="category" value="{{$dataDetails->name}}" class="form-control" required>
+                                {{--@foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach -->
+                                @endforeach--}}
                                 @foreach($catdata as $c)
-                                    <option value="{{$c->id}}">{{$c->name}}</option>
-                                @endforeach
+                                    <option @if($c->id == $dataDetails->category_id) selected @endif value="{{$c->id}}">{{$c->name}}</option>
+                                @endforeach 
                             </select>
                             
                         </div>
@@ -61,47 +62,47 @@
                         </div>
                         <div class="form-group m-t-20">
                             <label>Banner Alt</label>
-                            <input type="text" class="form-control" id="baneeralt" name="banneralt" placeholder="Enter Banner ALT" required>
+                            <input type="text" class="form-control" id="baneeralt" name="banneralt"  value="{{$dataDetails->banner_img_alt}}"placeholder="Enter Banner ALT" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Banner Heading</label>
-                            <input type="text" class="form-control" id="baneeheading" name="bannerheading" placeholder="Enter Banner Heading" required>
+                            <input type="text" class="form-control" id="baneeheading" name="bannerheading" value="{{$dataDetails->banner_heading}}" placeholder="Enter Banner Heading" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Content Top</label>
-                            <textarea class="form-control" rows="5" id="falseurlcontenttop" name="falseurlcontenttop" placeholder="Enter Content Top" required></textarea>
+                            <textarea class="form-control" rows="5" id="falseurlcontenttop" name="falseurlcontenttop" placeholder="Enter Content Top" required>{{$dataDetails->content_top}}</textarea>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Content Bottom</label>
-                            <textarea class="form-control" rows="5" id="falseurlcontentbottom" name="falseurlcontentbottom" placeholder="Enter Content Bottom" required></textarea>
+                            <textarea class="form-control" rows="5" id="falseurlcontentbottom" name="falseurlcontentbottom" placeholder="Enter Content Bottom" required>{{$dataDetails->content_bottom}}</textarea>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Product Sort Order<span>*</span></label>
                             <select id="productsordr"  name="productsorder" class="form-control" required>
-                                <!-- @foreach($catdata as $key => $category)
+                                {{-- @foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach -->
+                                @endforeach --}}
                                 @foreach($orderdata as $od)
-                                    <option value="{{$od->id}}">{{$od->name}}</option>
+                                    <option @if($od->id == $dataDetails->sort_order) selected @endif value="{{$od->id}}">{{$od->name}}</option>
                                 @endforeach
                             </select>
                             
                         </div>
                         <div class="form-group m-t-20">
                             <label>Meta Title</label>
-                            <input type="text" class="form-control" id="falseurlmeta_title" name="falseurlmeta_title" placeholder="Enter Meta Title" required>
+                            <input type="text" class="form-control" id="falseurlmeta_title" name="falseurlmeta_title" value="{{$dataDetails->meta_title}}" placeholder="Enter Meta Title" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Meta Description</label>
-                            <textarea class="form-control" rows="5" id="falseurlmeta_description" name="falseurlmeta_description" placeholder="Enter Meta Description" required></textarea>
+                            <textarea class="form-control" rows="5" id="falseurlmeta_description" name="falseurlmeta_description" placeholder="Enter Meta Description" required>{{$dataDetails->meta_description}}</textarea>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Tagline</label>
-                            <input type="text" class="form-control" id="falseurltagline" name="falseurltagline" placeholder="Enter Tagline" required>
+                            <input type="text" class="form-control" id="falseurltagline" name="falseurltagline" value="{{$dataDetails->tag_line}}" placeholder="Enter Tagline" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Top Head</label>
-                            <input type="text" class="form-control" id="falseurltophead" name="falseurltophead" placeholder="Enter Tophead" required>
+                            <input type="text" class="form-control" id="falseurltophead" name="falseurltophead" value="{{$dataDetails->tophead}}" placeholder="Enter Tophead" required>
                         </div>
                     </div>
                     <div class="border-top">

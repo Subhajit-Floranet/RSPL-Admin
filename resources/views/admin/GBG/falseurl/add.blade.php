@@ -40,7 +40,7 @@
 
                         <div class="form-group m-t-20">
                             <label>False URL<span>*</span></label>
-                          <div><input type="text" id="falseurllink" name="falseurllink" class="form-control" value="falseurl"></div><input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter False Extension" required>
+                          <div>http://www.gbg.de</div><input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter False Extension" required>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Category<span>*</span></label>
