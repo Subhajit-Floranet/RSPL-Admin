@@ -9,6 +9,7 @@
                     <ul aria-expanded="false" class="collapse first-level in">
                         <li class="sidebar-item"><a href="{{route('admin.gbg.cms.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">CMS Management</span></a></li>  
                         <li class="sidebar-item"><a href="{{route('admin.gbg.category.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Category Management</span></a></li>
+                        <li class="sidebar-item"><a href="{{route('admin.gbg.falseurl.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">FalseUrl Management</span></a></li>
                     </ul>
                 </li>
 

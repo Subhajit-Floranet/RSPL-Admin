@@ -165,7 +165,9 @@ class GBGCategoryController extends CommonController
 
             $update_arr['name'] = $request->ctitle;
             $update_arr['page_head'] = $request->chead;
-            $update_arr['image'] = $imageName;
+            if(isset($imagefile)){
+                $update_arr['image'] = $imageName;
+            }
             $update_arr['banner_heading'] = $request->cbannerhead;
             $update_arr['menu_head_only'] = $request->cmenuhead;
             $update_arr['cat_section'] = $request->ctype;
