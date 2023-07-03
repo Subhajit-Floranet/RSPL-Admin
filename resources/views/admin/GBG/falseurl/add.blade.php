@@ -40,7 +40,12 @@
 
                         <div class="form-group m-t-20">
                             <label>False URL<span>*</span></label>
-                          <div>http://www.gbg.de</div><input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter False Extension" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">{!!$websiteUrl!!}</span>
+                                </div>
+                                <input type="text" class="form-control" id="falseurl" name="falseurl" placeholder="Enter Url" required>
+                            </div>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Category<span>*</span></label>
@@ -140,9 +145,9 @@
     });
 
     /*Tinymce editor*/
-    if ($("#ccontenttop").length) {
+    if ($("#falseurlcontenttop").length) {
         tinymce.init({
-            selector: '#ccontenttop',
+            selector: '#falseurlcontenttop',
             height: 200,
             theme: 'modern',
             plugins: [
@@ -172,9 +177,9 @@
         });
     }
 
-    if ($("#ccontentbottom").length) {
+    if ($("#falseurlcontentbottom").length) {
         tinymce.init({
-            selector: '#ccontentbottom',
+            selector: '#falseurlcontentbottom',
             height: 200,
             theme: 'modern',
             plugins: [

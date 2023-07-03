@@ -8,6 +8,8 @@
 
 <script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 <script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
+<script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
+<script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 
 <body onload="myFunction()">
 <div class="page-breadcrumb">
@@ -33,7 +35,7 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
-                <form action="{{route('admin.'.$websiteShortCode.'.falseurl.edit')}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
+                <form action="{{route('admin.'.$websiteShortCode.'.falseurl.edit', [base64_encode($dataDetails->id)])}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <h4 class="card-title">Edit False URL</h4>
@@ -41,14 +43,19 @@
                         <input type="hidden" name="formid" value="<?php echo $dataDetails->id; ?>">
                         <div class="form-group m-t-20">
                             <label>False URL<span>*</span></label>
-                            <div>http://www.gbg.de</div><input type="text" class="form-control" id="falseurl" name="falseurl" value="{{$dataDetails->slug_url}}" placeholder="Enter False Extension" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">{!!$websiteUrl!!}</span>
+                                </div>
+                                <input type="text" class="form-control" id="falseurl" name="falseurl" value="{{$dataDetails->slug_url}}" placeholder="Enter False Extension" required>
+                            </div>
                         </div>
                         <div class="form-group m-t-20">
                             <label>Category<span>*</span></label>
-                            <select id="category" name="category" value="{{$dataDetails->name}}" class="form-control" required>
-                                {{--@foreach($catdata as $key => $category)
+                            <select id="category" name="category" class="form-control" required>
+                                <!-- @foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach--}}
+                                @endforeach -->
                                 @foreach($catdata as $c)
                                     <option @if($c->id == $dataDetails->category_id) selected @endif value="{{$c->id}}">{{$c->name}}</option>
                                 @endforeach 
@@ -59,6 +66,9 @@
                             <label>Image</label>
                             <input type="file" class="form-control" id="fimage" name="fimage"  >
                             <p>Please upload minimum 1500px X 400px image only</p>
+                            @if ($dataDetails->banner_img!='')
+                                <img src="{{asset('uploads/falseurl/'.$dataDetails->banner_img)}}" style="width: 30%; height:100px">&nbsp;&nbsp;<a class="btn btn-danger" href="{{route('admin.'.$websiteShortCode.'.falseurl.deleteimage', [base64_encode($dataDetails->id)])}}">Delete</a>
+                            @endif
                         </div>
                         <div class="form-group m-t-20">
                             <label>Banner Alt</label>
@@ -79,9 +89,9 @@
                         <div class="form-group m-t-20">
                             <label>Product Sort Order<span>*</span></label>
                             <select id="productsordr"  name="productsorder" class="form-control" required>
-                                {{-- @foreach($catdata as $key => $category)
+                                <!-- @foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach --}}
+                                @endforeach -->
                                 @foreach($orderdata as $od)
                                     <option @if($od->id == $dataDetails->sort_order) selected @endif value="{{$od->id}}">{{$od->name}}</option>
                                 @endforeach
@@ -107,7 +117,7 @@
                     </div>
                     <div class="border-top">
                         <div class="card-body">
-                            <input class="btn btn-primary" type="submit" value="CREATE">
+                            <input class="btn btn-primary" type="submit" value="UPDATE">
                         </div>
                     </div>
                 </form>
@@ -141,9 +151,9 @@
     });
 
     /*Tinymce editor*/
-    if ($("#ccontenttop").length) {
+    if ($("#falseurlcontenttop").length) {
         tinymce.init({
-            selector: '#ccontenttop',
+            selector: '#falseurlcontenttop',
             height: 200,
             theme: 'modern',
             plugins: [
@@ -173,9 +183,9 @@
         });
     }
 
-    if ($("#ccontentbottom").length) {
+    if ($("#falseurlcontentbottom").length) {
         tinymce.init({
-            selector: '#ccontentbottom',
+            selector: '#falseurlcontentbottom',
             height: 200,
             theme: 'modern',
             plugins: [

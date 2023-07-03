@@ -34,8 +34,6 @@ class GBGFalseUrlController extends CommonController
         $websiteShortCode = 'gbg';
 
         $where = $orWhere = [];
-
-        //$result = GBGFalseUrl::orderBy('created_at', 'desc')->get();
         $result = GBGFalseUrl::join('categories','false_urls.category_id','=','categories.id')->get(["categories.name","false_urls.*"]);
         return view('admin.GBG.falseurl.list', ['result' => $result,  'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
@@ -48,15 +46,11 @@ class GBGFalseUrlController extends CommonController
         }
 
         $websiteShortCode = 'gbg';
+        $websiteUrl = 'https://www.giftbasketsgermany.de/';
         
-
+        
         $obj = new GBGFalseUrl;
-        //$catdata = GBGCategory::where(['is_block'=>'N'])->pluck('name','id');
-       // print_r($catdata);
-        //dd($catdata);
-        //print_r($data);
         if($request->isMethod('POST')){
-            //dd($request);
             $request->validate([
                 'falseurl'=>'required',
                 'category'=>'required',
@@ -81,7 +75,6 @@ class GBGFalseUrlController extends CommonController
                 }
 
                 $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
-                //$imagefile->move(public_path(). \uploads\banner\, $imageName);
                 $imagefile->move(public_path() . '/uploads/falseurl/', $imageName);
             }
 
@@ -102,16 +95,6 @@ class GBGFalseUrlController extends CommonController
                    
             ]))
             {
-                // $id=$cat->id;
-                // if ($request->ctype=="P"){
-                //     $obj2 = new GBGPriceBrand();
-                //     $obj2->category_id=$id;
-                //     $obj2->from_price=$request->from_price;
-                //     $obj2->to_price=$request->to_price;
-                //     $obj2->equation=$request->equation;
-                //     $obj2->save();
-                // }
-                //print_r($cat);
                 $request->session()->flash('alert-success', 'FalseURL successfully added.');
                 return redirect()->route('admin.gbg.falseurl.list');
             }else{
@@ -122,34 +105,27 @@ class GBGFalseUrlController extends CommonController
         }
         $catdata=GBGCategory::all();
         $orderdata=GBGFalseUrlProductSort::all();
-        return view('admin.gbg.falseurl.add', ['request' => $request, 'catdata' => $catdata, 'orderdata' => $orderdata, 'websiteShortCode' => $websiteShortCode]);
+        return view('admin.gbg.falseurl.add', ['request' => $request, 'catdata' => $catdata, 'orderdata' => $orderdata, 'websiteShortCode' => $websiteShortCode, 'websiteUrl' => $websiteUrl]);
     }
 
     public function edit($id = null, Request $request){
-
+        
         if($this->checkPermission('falseurl','list') == false && $this->checkSuperPermission('falseurl','list') == false ){
             $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
             return redirect()->route('admin.home');
         }
 
         $websiteShortCode = 'gbg';
+        $websiteUrl = 'https://www.giftbasketsgermany.de/';
         $pricedtl = $imageName = '';
 
-         $id = base64_decode($id);
-		 $dataDetails  = GBGFalseUrl::where('id',$id)->first();
-
-        // $dataPriceBrand = GBGPriceBrand::where('category_id', $id)->first();
-
-        // if($dataPriceBrand){
-        //     $pricedtl = $dataPriceBrand;
-        // }else{
-        //     $pricedtl = '';
-        // }
-        
+        $id = base64_decode($id);
+		$dataDetails  = GBGFalseUrl::where('id',$id)->first();
+        $catdata=GBGCategory::all();
+        $orderdata=GBGFalseUrlProductSort::all();
         $obj = new GBGFalseUrl;
          
         if($request->isMethod('POST')){
-            //dd($request);
             $request->validate([
                 'falseurl'=>'required',
                 'category'=>'required',
@@ -164,18 +140,20 @@ class GBGFalseUrlController extends CommonController
                 'falseurltophead'=>'required'
             ]);
             
-            // $imagefile=$request->file("cimage");
-            // if (isset($imagefile)){
-            //     $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
-            //     $imagefile->move(public_path() . '/uploads/banner/', $imageName);
-            // }
+            $imagefile=$request->file("fimage");
+            if (isset($imagefile)){
+                $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
+                $imagefile->move(public_path() . '/uploads/falseurl/', $imageName);
+            }
             $a = 0;
             $formid=$request->formid;
 
             $update_arr['country_id'] = $a;
             $update_arr['slug_url'] = $request->falseurl;
             $update_arr['category_id'] = $request->category;
-            //$update_arr['image'] = $imageName;
+            if(isset($imagefile)){
+                $update_arr['banner_img'] = $imageName;
+            }
             $update_arr['banner_img_alt'] = $request->banneralt;
             $update_arr['banner_heading'] = $request->bannerheading;
             $update_arr['content_top'] = $request->falseurlcontenttop;
@@ -185,28 +163,6 @@ class GBGFalseUrlController extends CommonController
             $update_arr['meta_description'] = $request->falseurlmeta_description;
             $update_arr['tag_line'] = $request->falseurltagline;
             $update_arr['tophead'] = $request->falseurltophead;  
-
-            // $dataPriceBrandUpd= GBGPriceBrand::where('category_id', $formid)->first();
-
-            // if ($request->ctype=="P"){
-            //     if($dataPriceBrandUpd){
-            //         $dataPriceBrandUpd->from_price=$request->from_price;
-            //         $dataPriceBrandUpd->to_price=$request->to_price;
-            //         $dataPriceBrandUpd->equation=$request->equation;
-            //         $dataPriceBrandUpd->update();
-            //     }else{
-            //         $obj2 = new GBGPriceBrand();
-            //         $obj2->category_id=$formid;
-            //         $obj2->from_price=$request->from_price;
-            //         $obj2->to_price=$request->to_price;
-            //         $obj2->equation=$request->equation;
-            //         $obj2->save();
-            //     }
-            // }else{
-            //     if($dataPriceBrandUpd){
-            //        $object=GBGPriceBrand::where('id', $dataPriceBrandUpd->id)->delete();
-            //     }
-            // }
             
             if(GBGFalseUrl::where(['id' => $request->formid])->update($update_arr)){
                    
@@ -217,9 +173,8 @@ class GBGFalseUrlController extends CommonController
                 return redirect()->back()->with($request->except(['_method', '_token']));
             }
         }
-        $catdata=GBGCategory::all();
-        $orderdata=GBGFalseUrlProductSort::all();
-         return view('admin.GBG.falseurl.edit', ['dataDetails' => $dataDetails, 'catdata' => $catdata, 'orderdata' => $orderdata, 'request' => $request, 'websiteShortCode' => $websiteShortCode, 'pricedtl' => $pricedtl]);
+        
+        return view('admin.GBG.falseurl.edit', ['dataDetails' => $dataDetails, 'catdata' => $catdata, 'orderdata' => $orderdata, 'request' => $request, 'websiteShortCode' => $websiteShortCode, 'websiteUrl' => $websiteUrl]);
     }
 
 
@@ -256,8 +211,6 @@ class GBGFalseUrlController extends CommonController
             return redirect()->route('admin.dashboard');
         }
         $id = base64_decode($request->id);
-        //$block = 'N';
-        //$blockText = 'blocked';
         switch($request->status){
             case 'N':
                 $block = 'Y';
@@ -283,30 +236,28 @@ class GBGFalseUrlController extends CommonController
         }
     }
 
-    // public function deleteimage($id = null, Request $request){
-    //     if($this->checkPermission('category','list') == false && $this->checkSuperPermission('category','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
+    public function deleteimage($id = null, Request $request){
+        if($this->checkPermission('falseurl','list') == false && $this->checkSuperPermission('falseurl','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
         
-    //     $websiteShortCode = 'gbg';
+        $websiteShortCode = 'gbg';
 
-    //     if($id == null){
-    //         return redirect()->route('admin.home');
-    //     }
-    //     $id = base64_decode($id);
-    //     $dataDetails  = GBGCategory::find($id);
-    //     unlink(public_path() . '/uploads/banner/'.$dataDetails->image);
-    //     //$dataDetails->image='';
-    //     //$dataDetails->update();
+        if($id == null){
+            return redirect()->route('admin.home');
+        }
+        $id = base64_decode($id);
+        $dataDetails  = GBGFalseUrl::find($id);
+        unlink(public_path() . '/uploads/falseurl/'.$dataDetails->banner_img);
 
-    //     if($dataDetails->update(['image' => ''])){
-    //         $request->session()->flash('alert-success', 'Category image deleted successfully.');
-    //         return redirect()->back();
-    //     }else{
-    //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //         return redirect()->back();
-    //     }
+        if($dataDetails->update(['banner_img' => ''])){
+            $request->session()->flash('alert-success', 'FalseUrl image deleted successfully.');
+            return redirect()->back();
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
         
-    // }
+    }
 }
