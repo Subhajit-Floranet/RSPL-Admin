@@ -89,9 +89,9 @@
                         <div class="form-group m-t-20">
                             <label>Product Sort Order<span>*</span></label>
                             <select id="productsordr"  name="productsorder" class="form-control" required>
-                                <!-- @foreach($catdata as $key => $category)
+                                {{-- @foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach -->
+                                @endforeach --}}
                                 @foreach($orderdata as $od)
                                     <option @if($od->id == $dataDetails->sort_order) selected @endif value="{{$od->id}}">{{$od->name}}</option>
                                 @endforeach
