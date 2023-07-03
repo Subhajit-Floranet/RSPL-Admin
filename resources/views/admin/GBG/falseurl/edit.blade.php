@@ -53,9 +53,9 @@
                         <div class="form-group m-t-20">
                             <label>Category<span>*</span></label>
                             <select id="category" name="category" class="form-control" required>
-                                <!-- @foreach($catdata as $key => $category)
+                                {{-- @foreach($catdata as $key => $category)
                                     <option value="{{$key}}">{{$category}}</option>
-                                @endforeach -->
+                                @endforeach --}}
                                 @foreach($catdata as $c)
                                     <option @if($c->id == $dataDetails->category_id) selected @endif value="{{$c->id}}">{{$c->name}}</option>
                                 @endforeach 
