@@ -48,7 +48,7 @@ class GBGFalseUrlController extends CommonController
         $websiteShortCode = 'gbg';
         $websiteUrl = 'https://www.giftbasketsgermany.de/';
         
-        
+        //$catdata = GBGCategory::where(['is_block' == 'N'])->pluck('id','name');
         $obj = new GBGFalseUrl;
         if($request->isMethod('POST')){
             $request->validate([
