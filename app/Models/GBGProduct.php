@@ -14,7 +14,15 @@ class GBGProduct extends Model
     protected $guarded = [];
 
     public function product_attribute(){
-        return $this->hasMany('App\Models\GBGProductAttribute', 'product_id', 'id')->where('is_block','N')->orderBy('sl_no');
+        return $this->hasMany('App\Models\GBGProductAttribute', 'product_id')->where('is_block','N')->orderBy('sl_no');
+    }
+
+    public function default_product_image(){
+        return $this->hasOne('App\Models\GBGProductImage', 'product_id')->where('default_image','Y');
+    }
+    
+    public function default_product_category(){
+        return $this->hasMany('App\Models\GBGProductCategory', 'product_id');
     }
 
     public static function getUniqueSlug( $title, $id = 0 ) {
