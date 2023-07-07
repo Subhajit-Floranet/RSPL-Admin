@@ -64,10 +64,9 @@
                                                     {{$attribute->title}} <b>USD {{$attribute->price}}</b> <br>    
                                                 @endforeach
                                             @endif
-                                        @else
-                                            {{$data->price}}
-                                        @endif
-                                    </td>
+                                    <td></td>
+                                    
+                                    
                                     <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>!-->
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
