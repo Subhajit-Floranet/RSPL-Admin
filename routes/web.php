@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\GBGCmsController;
 use App\Http\Controllers\Admin\GBGCategoryController;
 use App\Http\Controllers\Admin\GBGFalseUrlController;
-
+use App\Http\Controllers\Admin\GBGProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -78,6 +78,15 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/delete/{id}', [GBGFalseUrlController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGFalseUrlController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGFalseUrlController::class, 'deleteimage'])->name('deleteimage');
+            });
+
+            Route::group(['prefix' => 'product', 'as' => 'product.'], function () {
+                Route::any('/', [GBGProductController::class, 'list'])->name('list');
+                Route::any('/add', [GBGProductController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGProductController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGProductController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGProductController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGProductController::class, 'deleteimage'])->name('deleteimage');
             });
 
         });

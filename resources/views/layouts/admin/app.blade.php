@@ -98,6 +98,8 @@
     <script src="{{ asset('admin/dist/js/custom.min.js') }}"></script>
     <!--This page JavaScript -->
     <!-- <script src="dist/js/pages/dashboards/dashboard1.js"></script> -->
+    <script src="{{ asset('admin/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/libs/select2/dist/js/select2.min.js') }}"></script>
     <!-- Charts js Files -->
     <script src="{{ asset('admin/assets/libs/flot/excanvas.js') }}"></script>
     <script src="{{ asset('admin/assets/libs/flot/jquery.flot.js') }}"></script>
