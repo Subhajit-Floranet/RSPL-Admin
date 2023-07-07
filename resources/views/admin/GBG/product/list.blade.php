@@ -49,15 +49,21 @@
                                 @foreach($result as $key => $data)
                                 <tr>
                                     <td>{{$key + 1}}</td>
-                                    <td></td>
+                                    <td>
+                                        {{$data->default_product_image['name']}}
+                                    </td>
                                     
                                     <td>{{$data->product_name}}</td>
                                     <td>{{$data->id}} / {{$data->fnid}}</td>
-                                    <td></td>
+                                    <td>{{$data->default_product_category}}</td>
                                     <td>
                                         
                                         @if($data->has_attribute == "Y")
-                                            jdtojewish
+                                            @if(count($data->product_attribute) > 0)
+                                                @foreach($data->product_attribute as $attribute)
+                                                    {{$attribute->title}} <b>USD {{$attribute->price}}</b> <br>    
+                                                @endforeach
+                                            @endif
                                         @else
                                             {{$data->price}}
                                         @endif
@@ -103,7 +109,7 @@
      *       Basic Table                   *
      ****************************************/
     $('#zero_config').DataTable({
-        "order": [[5, "desc"]] 
+        "order": [[7, "desc"]] 
     });
 
     $(function(){
