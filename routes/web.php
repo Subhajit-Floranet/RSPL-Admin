@@ -87,6 +87,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/delete/{id}', [GBGProductController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGProductController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGProductController::class, 'deleteimage'])->name('deleteimage');
+               Route::any('/deleteattribute', [GBGProductController::class, 'deleteattribute'])->name('deleteattribute');
             });
 
         });

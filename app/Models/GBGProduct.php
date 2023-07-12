@@ -34,7 +34,8 @@ class GBGProduct extends Model
         $allSlugs = GBGProduct::select('slug')->where('slug', 'like', $slug.'%')
                                 ->where('id', '<>', $id)
                                 ->get();
-
+        // print_r($allSlugs);
+        // die;
         // If we haven't used it before then we are all good.
         if (! $allSlugs->contains('slug', $slug)){
             return $slug;
@@ -48,5 +49,4 @@ class GBGProduct extends Model
             }
         }
     }
-    
 }

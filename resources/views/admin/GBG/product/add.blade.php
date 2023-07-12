@@ -172,9 +172,10 @@
     });
 
     /*Tinymce editor*/
-    if ($("#pdescription").length) {
+
+    if ($("#product_description").length) {
         tinymce.init({
-            selector: '#pdescription',
+            selector: '#product_description',
             height: 200,
             theme: 'modern',
             plugins: [
@@ -284,7 +285,6 @@
             $('.has_attribute_show').slideDown();
             $('.no_attribute_show').slideUp();
             $('.actual_price').slideUp();
-            $('.product_actual_price').hide();
             $("input[id*=attr_price]").attr("required",true);
             $("input[id*=attr_title]").attr("required",true);
             $("input[id*=product_price]").attr("required",false);
@@ -294,7 +294,6 @@
             $("input[id*=attr_title]").attr("required",false);
             $('.has_attribute_show').slideUp();
             $('.no_attribute_show').slideDown();
-            $('.product_actual_price').show();
             $('.actual_price').slideDown();
 
         }
@@ -317,7 +316,7 @@
                 cols += '<div class="col-sm-4"><input required class="form-control" placeholder="Enter Attribute Title" id="attr_title'+counter+'" name="attr_title['+counter+']" type="text"></div>';
                 cols += '<div class="col-sm-3"><input required class="form-control" placeholder="Enter Price" id="attr_price'+counter+'" name="attr_price['+counter+']" type="number" min=0></div>';
                 cols += '<div class="col-sm-3"><input required class="form-control" placeholder="Enter MRP" id="attr_actual_price'+counter+'" name="attr_actual_price['+counter+']" type="number" min=0></div>';
-                cols += '<div class="col-sm-2"><a class="deleteRow" href="javascript: void(0);"><i class="fas fa-trash-alt ibtnDel"></i></a></div></div>';
+                cols += '<div class="col-sm-2"><a class="deleteRow" href="javascript: void(0);"><i class="fas fa-trash-alt ibtnDel"></i></a></div>';
 
                 newRow.append(cols);
                 $(".addField").append(newRow);

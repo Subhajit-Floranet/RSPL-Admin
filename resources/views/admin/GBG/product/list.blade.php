@@ -8,9 +8,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} FalseUrl</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Product</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.product.add') }}" class="btn btn-success">ADD FalseUrl</a>
+                <a href="{{ route('admin.'.$websiteShortCode.'.product.add') }}" class="btn btn-success">ADD Product</a>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
                             <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                         @endif
                     @endforeach
-                    <h5 class="card-title">False Url</h5>
+                    <h5 class="card-title">Product</h5>
                     @if(count($result) > 0)
                     <!-- @php echo "<pre>"; print_r($result); echo "</pre>"; @endphp -->
                     <div class="table-responsive">
@@ -55,7 +55,16 @@
                                     
                                     <td>{{$data->product_name}}</td>
                                     <td>{{$data->id}} / {{$data->fnid}}</td>
-                                    <td>{{$data->default_product_category}}</td>
+
+                                    <td>  @if(count($data->default_product_category) > 0)
+                                            @foreach($data->default_product_category as $category)
+                                                {{$category_data[($category->category_id)-1]->name}}|
+                                            @endforeach
+                                        @endif
+                                    </td>
+
+                                    
+
                                     <td>
                                         
                                         @if($data->has_attribute == "Y")
@@ -64,9 +73,16 @@
                                                     {{$attribute->title}} <b>USD {{$attribute->price}}</b> <br>    
                                                 @endforeach
                                             @endif
+
+                                        @else
+                                            {{$data->price}}
+                                        @endif
+                                    </td>
+
                                     <td></td>
                                     
                                     
+
                                     <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>!-->
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
@@ -121,7 +137,7 @@
 				status = 'N'
 			}
 			id = $(this).attr('data-id');
-			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.falseurl.status') }}";	
+			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.product.status') }}";	
 			//alert(ajaxurl);
 			$.ajax({
 				type : 'POST',
