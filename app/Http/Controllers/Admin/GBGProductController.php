@@ -40,22 +40,9 @@ class GBGProductController extends CommonController
 
         //DB::enableQueryLog();
             
-        $result = GBGProduct::select('id', 'product_name', 'fnid', 'is_block', 'has_attribute', 'created_at')->orderBy('id', 'DESC')->get();
-
-        //dd($result[0]);
-        //dd(DB::getQueryLog());
-
-        // $result = DB::table('products')
-        //          ->join('product_images','products.id','=','product_images.product_id')
-        //          ->join('product_attributes'.'products.id','=','product_attributes.product_id')
-        //          ->join('product_categories','product.id','=','product_categories.product_id')
-        //          ->select(['products.*','product_attributes.*','product_images.*'])
-        //          ->get();
-       
-        //$result = GBGProduct::join('product_categories','products.id','=','product_categories.product_id')->get(["product_categories.*","products.*"]);
-        //$result1 = GBGProductAttribute::all();
-        //$result2 = GBGProductImage::all();
-        return view('admin.GBG.product.list', ['result' => $result, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
+        $result = GBGProduct::select('id', 'product_name','price', 'fnid', 'is_block', 'has_attribute', 'created_at')->orderBy('id', 'DESC')->get();
+        $category_data = GBGCategory::all();
+        return view('admin.GBG.product.list', ['result' => $result, 'category_data' => $category_data, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
 
     
@@ -172,99 +159,119 @@ class GBGProductController extends CommonController
         return view('admin.gbg.product.add', ['request' => $request, 'catdata' => $catdata, 'websiteShortCode' => $websiteShortCode]);
     }
 
-    // public function edit($id = null, Request $request){
+    public function edit($id = null, Request $request){
 
-    //     if($this->checkPermission('category','list') == false && $this->checkSuperPermission('category','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
+        if($this->checkPermission('product','list') == false && $this->checkSuperPermission('product','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
 
-    //     $websiteShortCode = 'gbg';
-    //     $pricedtl = $imageName = '';
+        $websiteShortCode = 'gbg';
 
-    //     $id = base64_decode($id);
-	// 	$dataDetails  = GBGCategory::where('id',$id)->first();
+        $id = base64_decode($id);
+		$productdetails  = GBGProduct::where('id', $id)->first();
+        $categorydetails = GBGProductCategory::where('product_id', $id)->get();
+        $attributedetails = GBGProductAttribute::where('product_id', $id)->get();
+        $imagedetails = GBGProductImage::where('product_id', $id)->first();
+        $catdata = GBGCategory::all();
 
-    //     $dataPriceBrand = GBGPriceBrand::where('category_id', $id)->first();
+        if($request->isMethod('POST')){
+            $request->validate([
+                'product_title'=>'required',
+                'categories_id'=>'required',
+                'product_description'=>'required',
+                'has_attribute'=>'required',
+                'delivery_delay_days'=>'required',
+                'alt_keyword'=>'required',
+                'meta_title'=>'required',
+                'meta_description'=>'required',
+                'fnid'=>'required',
+                'extra_field'=>'required',
+            ]);
 
-    //     if($dataPriceBrand){
-    //         $pricedtl = $dataPriceBrand;
-    //     }else{
-    //         $pricedtl = '';
-    //     }
-        
-    //     $obj = new GBGCategory;
+            $formid=$request->formid;
 
-    //     if($request->isMethod('POST')){
-    //         //dd($request);
-    //         $request->validate([
-    //             'ctitle'=>'required',
-    //             'chead'=>'required',
-    //             'cbannerhead'=>'required',
-    //             'ccontenttop'=>'required',
-    //             'ccontentbottom'=>'required',
-    //             'cmeta_title'=>'required',
-    //             'cmeta_description'=>'required',
-    //             'ctagline'=>'required',
-    //             'ctophead'=>'required'
-    //         ]);
+            if($request->has_attribute == 'N'){
+                $price = $request->product_price;
+            }else{
+                $price = 0;
+            }
+
+            $update_arr['product_name'] = $request->product_title;
+            $update_arr['description'] = $request->product_description;
+            $update_arr['content'] = $request->content;
+            $update_arr['delivery_info'] = $request->shipping;
+            $update_arr['has_attribute'] = $request->has_attribute;
+            $update_arr['price'] = $price;
+            $update_arr['actual_price'] = $request->product_actual_price;
+            $update_arr['delivery_delay_days'] = $request->delivery_delay_days;
+            $update_arr['alt_key'] = $request->alt_keyword;
+            $update_arr['meta_title'] = $request->meta_title;
+            $update_arr['meta_description'] = $request->meta_description;
+            $update_arr['slug'] =  GBGProduct::getUniqueSlug($request->product_title);
+            $update_arr['search_tag'] = $request->search_tag;  
+            $update_arr['fnid'] = $request->fnid; 
+            $update_arr['extra_field'] = $request->extra_field; 
+           
+            $productcategory= GBGProductCategory::where(['product_id' => $formid])->delete();
+
+            if(isset($request->has_attribute) && $request->has_attribute == 'N'){
+                $obj = GBGProduct::where(['id' => $formid])->first();
+                if($obj->has_attribute == 'Y'){
+                    $productattribute = GBGProductAttribute::where(["product_id" => $formid])->delete();
+                }
+            }
+
+            if(isset($request->has_attribute) && $request->has_attribute == 'Y'){
+                $productattribute= GBGProductAttribute::where(['product_id' => $formid])->delete();
+                if((isset($request->attr_title) && count($request->attr_title)>0) && (isset($request->attr_price) && count($request->attr_price)>0) && (isset($request->attr_actual_price) && count($request->attr_actual_price)>0)){
+                    foreach ($request->attr_title as $attr_key => $attribute_title) {
+                        $product_attribute = [];
+                        $product_attribute['product_id'] = $formid;
+                        $product_attribute['title']      = $attribute_title;
+                        $product_attribute['price']      = $request->attr_price[$attr_key];
+                        $product_attribute['actual_price'] = $request->attr_actual_price[$attr_key];
+                        $product_attribute['sl_no']      = $attr_key;
+                        
+                        GBGProductAttribute::create($product_attribute);
+
+                        if( $attr_key == 0 ){
+                            GBGProduct::where('id',$formid)->update(['price' => $request->attr_price[$attr_key]]);
+                        }
+                    }
+                }
+            }
+
             
-    //         $imagefile=$request->file("cimage");
-    //         if (isset($imagefile)){
-    //             $imageName = strtotime(now()).rand(11111,99999).'-banner.'.$imagefile->getClientOriginalExtension();
-    //             $imagefile->move(public_path() . '/uploads/banner/', $imageName);
-    //         }
 
-    //         $formid=$request->formid;
+            if((isset($request->categories_id) && count($request->categories_id)>0)){
+                foreach( $request->categories_id as $cat_id ) {
+                    $categories_data['product_id'] = $formid;
+                    $categories_data['category_id']  = $cat_id;
+                    GBGProductCategory::create($categories_data);
+                }
+            }
 
-    //         $update_arr['name'] = $request->ctitle;
-    //         $update_arr['page_head'] = $request->chead;
-    //         if(isset($imagefile)){
-    //             $update_arr['image'] = $imageName;
-    //         }
-    //         $update_arr['banner_heading'] = $request->cbannerhead;
-    //         $update_arr['menu_head_only'] = $request->cmenuhead;
-    //         $update_arr['cat_section'] = $request->ctype;
-    //         $update_arr['content_top'] = $request->ccontenttop;
-    //         $update_arr['content_bottom'] = $request->ccontentbottom;
-    //         $update_arr['meta_title'] = $request->cmeta_title;
-    //         $update_arr['meta_description'] = $request->cmeta_description;
-    //         $update_arr['tag_line'] = $request->ctagline;
-    //         $update_arr['tophead'] = $request->ctophead;  
+            $product_image['name']  = $request->fnid.'.webp';
+            $product_image['thumb']  = $request->fnid.'_mob.webp';
+            $product_image['default_image']  = 'Y';
+            $product_image['created_at'] = date('Y-m-d H:i:s');
+            $product_image['updated_at'] = date('Y-m-d H:i:s');
+            GBGProductImage::where(['product_id' => $formid])->update($product_image);
+
             
-    //         $dataPriceBrandUpd= GBGPriceBrand::where('category_id', $formid)->first();
-
-    //         if ($request->ctype=="P"){
-    //             if($dataPriceBrandUpd){
-    //                 $dataPriceBrandUpd->from_price=$request->from_price;
-    //                 $dataPriceBrandUpd->to_price=$request->to_price;
-    //                 $dataPriceBrandUpd->equation=$request->equation;
-    //                 $dataPriceBrandUpd->update();
-    //             }else{
-    //                 $obj2 = new GBGPriceBrand();
-    //                 $obj2->category_id=$formid;
-    //                 $obj2->from_price=$request->from_price;
-    //                 $obj2->to_price=$request->to_price;
-    //                 $obj2->equation=$request->equation;
-    //                 $obj2->save();
-    //             }
-    //         }else{
-    //             if($dataPriceBrandUpd){
-    //                $object=GBGPriceBrand::where('id', $dataPriceBrandUpd->id)->delete();
-    //             }
-    //         }
-            
-    //         if(GBGCategory::where(['id' => $request->formid])->update($update_arr)){
+            if(GBGProduct::where(['id' => $formid])->update($update_arr)){
                    
-    //             $request->session()->flash('alert-success', 'Catgory successfully updated.');
-    //             return redirect()->route('admin.gbg.category.list');
-    //         }else{
-    //             $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //             return redirect()->back()->with($request->except(['_method', '_token']));
-    //         }
-    //     }
-    //      return view('admin.GBG.category.edit', ['dataDetails' => $dataDetails, 'request' => $request, 'websiteShortCode' => $websiteShortCode, 'pricedtl' => $pricedtl]);
-    // }
+                $request->session()->flash('alert-success', 'Product successfully updated.');
+                return redirect()->route('admin.gbg.product.list');
+            }else{
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back()->with($request->except(['_method', '_token']));
+            }
+        }
+        
+        return view('admin.GBG.product.edit', ['catdata' => $catdata, 'productdetails' => $productdetails, 'categorydetails' => $categorydetails, 'attributedetails' => $attributedetails, 'imagedetails' => $imagedetails, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
+    }
 
     public function delete($id = null, Request $request)
     {
@@ -280,17 +287,17 @@ class GBGProductController extends CommonController
         }
         $id = base64_decode($id);
         $delobject = GBGProduct::where(['id' => $id])->first();
-        $delimage = GBGProductImage::where(['product_id' => $id])->first();
+        $delimage = GBGProductImage::where(['product_id' => $id])->delete();
         //dd($delimage);
-        $delcatagory = GBGProductCategory::where(['product_id' => $id])->get();
+        $delcatagory = GBGProductCategory::where(['product_id' => $id])->delete();
         //dd($delcatagory);
          if ($delobject->has_attribute == "Y"){
-            $delattribute = GBGProductAttribute::where(['product_id' => $id])->get();
+            $delattribute = GBGProductAttribute::where(['product_id' => $id])->delete();
             //dd($delattribute);
-            $delattribute->delete();
+           
         }
-        $delimage->delete();
-        $delcatagory->delete();
+        // $delimage->delete();
+        // $delcatagory->delete();
         if(GBGProduct::where(['id' => $id])->delete()){
             $request->session()->flash('alert-success', 'Product deleted successfully.');
             return redirect()->back();
@@ -300,65 +307,52 @@ class GBGProductController extends CommonController
         }
     }
 
-    // public function status(Request $request)
-    // {
-    //     if($request->id == null || $request->status == null){
-    //         return redirect()->route('admin.dashboard');
-    //     }
-    //     $id = base64_decode($request->id);
-    //     //$block = 'N';
-    //     //$blockText = 'blocked';
-    //     switch($request->status){
-    //         case 'N':
-    //             $block = 'Y';
-    //             $blockText = 'Block';
-    //             break;
-    //         case 'Y':
-    //             $block = 'N';
-    //             $blockText = 'Unblock';
-    //             break;
-    //         default:
-    //             $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //             return redirect()->back();
-    //     }
-    //     if(GBGCategory::where(['id' => $id])->update(['is_block' => $block])){
-    //         //$request->session()->flash('alert-success', 'Category successfully '.$blockText);
-    //         //return redirect()->back();
-    //         $prompt = array('status' => 1, 'id' => $id, 'event' => $blockText);
+    public function status(Request $request)
+    {
+        if($request->id == null || $request->status == null){
+            return redirect()->route('admin.dashboard');
+        }
+        $id = base64_decode($request->id);
+        //$block = 'N';
+        //$blockText = 'blocked';
+        switch($request->status){
+            case 'N':
+                $block = 'Y';
+                $blockText = 'Block';
+                break;
+            case 'Y':
+                $block = 'N';
+                $blockText = 'Unblock';
+                break;
+            default:
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back();
+        }
+        if(GBGProduct::where(['id' => $id])->update(['is_block' => $block])){
+            //$request->session()->flash('alert-success', 'Category successfully '.$blockText);
+            //return redirect()->back();
+            $prompt = array('status' => 1, 'id' => $id, 'event' => $blockText);
 
-    //         echo json_encode($prompt);
-    //     }else{
-    //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //         return redirect()->back();
-    //     }
-    // }
+            echo json_encode($prompt);
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
+    }
 
-    // public function deleteimage($id = null, Request $request){
-    //     if($this->checkPermission('category','list') == false && $this->checkSuperPermission('category','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
-        
-    //     $websiteShortCode = 'gbg';
+    public function deleteattribute(Request $request){
+       
+        //echo $request->aid;
+        //die;
+        if(GBGProductAttribute::where(['id' => $request->aid])->delete()){
+            $prompt = array('status' => 'success');
 
-    //     if($id == null){
-    //         return redirect()->route('admin.home');
-    //     }
-    //     $id = base64_decode($id);
-    //     $dataDetails  = GBGCategory::find($id);
-    //     unlink(public_path() . '/uploads/banner/'.$dataDetails->image);
-    //     //$dataDetails->image='';
-    //     //$dataDetails->update();
-
-    //     if($dataDetails->update(['image' => ''])){
-    //         $request->session()->flash('alert-success', 'Category image deleted successfully.');
-    //         return redirect()->back();
-    //     }else{
-    //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //         return redirect()->back();
-    //     }
-        
-    // }
+            echo json_encode($prompt);
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
+    }
 
     public function generate_sku($request){
         $formated_number = '';

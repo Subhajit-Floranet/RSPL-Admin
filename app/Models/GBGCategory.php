@@ -10,5 +10,8 @@ class GBGCategory extends Model
     protected $connection = "mysqlgbg";
     protected $guarded = [];
 
-    
+    public function category_attribute($id){
+        return $this->hasMany('App\Models\GBGProductCategory', 'category_id')->where('product_id',$id)->get();
+    }
+
 }
