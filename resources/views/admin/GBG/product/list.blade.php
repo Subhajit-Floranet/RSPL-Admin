@@ -55,12 +55,16 @@
                                     
                                     <td>{{$data->product_name}}</td>
                                     <td>{{$data->id}} / {{$data->fnid}}</td>
+
                                     <td>  @if(count($data->default_product_category) > 0)
                                             @foreach($data->default_product_category as $category)
                                                 {{$category_data[($category->category_id)-1]->name}}|
                                             @endforeach
                                         @endif
                                     </td>
+
+                                    
+
                                     <td>
                                         
                                         @if($data->has_attribute == "Y")
@@ -69,10 +73,16 @@
                                                     {{$attribute->title}} <b>USD {{$attribute->price}}</b> <br>    
                                                 @endforeach
                                             @endif
+
                                         @else
                                             {{$data->price}}
                                         @endif
                                     </td>
+
+                                    <td></td>
+                                    
+                                    
+
                                     <!--<td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>!-->
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
