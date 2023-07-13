@@ -11,7 +11,7 @@
                         <li class="sidebar-item"><a href="{{route('admin.gbg.category.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Category Management</span></a></li>
                         <li class="sidebar-item"><a href="{{route('admin.gbg.falseurl.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">FalseUrl Management</span></a></li>
                         <li class="sidebar-item"><a href="{{route('admin.gbg.product.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Product Management</span></a></li>
-  
+                        <li class="sidebar-item"><a href="{{route('admin.gbg.coupon.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Coupon Management</span></a></li>
                     </ul>
                 </li>
 
