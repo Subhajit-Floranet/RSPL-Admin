@@ -90,7 +90,6 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/deleteimage/{id}', [GBGProductController::class, 'deleteimage'])->name('deleteimage');
                Route::any('/deleteattribute', [GBGProductController::class, 'deleteattribute'])->name('deleteattribute');
             });
-
             
             Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
                 Route::any('/', [GBGCouponController::class, 'list'])->name('list');
