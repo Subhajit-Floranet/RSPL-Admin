@@ -88,6 +88,17 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/delete/{id}', [GBGProductController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGProductController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGProductController::class, 'deleteimage'])->name('deleteimage');
+                Route::any('/deleteattribute', [GBGProductController::class, 'deleteattribute'])->name('deleteattribute');
+            });
+            
+            Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+                Route::any('/', [GBGCouponController::class, 'list'])->name('list');
+                Route::any('/add', [GBGCouponController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGCouponController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGCouponController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGCouponController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGCouponController::class, 'deleteimage'])->name('deleteimage');
+               Route::any('/deleteattribute', [GBGCouponController::class, 'deleteattribute'])->name('deleteattribute');
             });
 
         });
