@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\GBGCategoryController;
 use App\Http\Controllers\Admin\GBGFalseUrlController;
 use App\Http\Controllers\Admin\GBGProductController;
 use App\Http\Controllers\Admin\GBGCouponController;
+use App\Http\Controllers\Admin\GBGHomeFeatureManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,7 +89,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/delete/{id}', [GBGProductController::class, 'delete'])->name('delete');
                 Route::post('/status', [GBGProductController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGProductController::class, 'deleteimage'])->name('deleteimage');
-               Route::any('/deleteattribute', [GBGProductController::class, 'deleteattribute'])->name('deleteattribute');
+                Route::any('/deleteattribute', [GBGProductController::class, 'deleteattribute'])->name('deleteattribute');
             });
             
             Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
@@ -99,6 +100,17 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::post('/status', [GBGCouponController::class, 'status'])->name('status');
                 Route::get('/deleteimage/{id}', [GBGCouponController::class, 'deleteimage'])->name('deleteimage');
                Route::any('/deleteattribute', [GBGCouponController::class, 'deleteattribute'])->name('deleteattribute');
+            });
+
+            Route::group(['prefix' => 'homefeaturemanagement', 'as' => 'homefeaturemanagement.'], function () {
+                Route::any('/', [GBGHomeFeatureManagementController::class, 'list'])->name('list');
+                Route::any('/add', [GBGHomeFeatureManagementController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGHomeFeatureManagementController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGHomeFeatureManagementController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGHomeFeatureManagementController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGHomeFeatureManagementController::class, 'deleteimage'])->name('deleteimage');
+                Route::any('/deleteattribute', [GBGHomeFeatureManagementController::class, 'deleteattribute'])->name('deleteattribute');
+                Route::any('/categoryproduct', [GBGHomeFeatureManagementController::class, 'categoryproduct'])->name('categoryproduct');
             });
 
         });
