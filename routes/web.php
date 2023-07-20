@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\GBGCouponController;
 use App\Http\Controllers\Admin\GBGHomeFeatureManagementController;
 use App\Http\Controllers\Admin\GBGTestimonialManagementController;
 use App\Http\Controllers\Admin\GBGAddonController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -115,6 +116,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::any('/categoryproduct', [GBGHomeFeatureManagementController::class, 'categoryproduct'])->name('categoryproduct');
             });
 
+
             Route::group(['prefix' => 'testimonialmanagement', 'as' => 'testimonialmanagement.'], function () {
                 Route::any('/', [GBGTestimonialManagementController::class, 'list'])->name('list');
                 Route::any('/add', [GBGTestimonialManagementController::class, 'add'])->name('add');
@@ -136,6 +138,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::any('/deleteattribute', [GBGAddonController::class, 'deleteattribute'])->name('deleteattribute');
                 Route::any('/categoryproduct', [GBGAddonController::class, 'categoryproduct'])->name('categoryproduct');
             });
+
 
         });
     });

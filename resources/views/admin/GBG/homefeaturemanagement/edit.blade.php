@@ -9,6 +9,7 @@
 <script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 <script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
 
+
 <!-- <link rel="stylesheet" type="text/css" href="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/css/select2.min.css"> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -22,6 +23,7 @@
             <h4 class="page-title">{{ strtoupper($websiteShortCode) }} GBGHomeFeatureManagement</h4>
             <div class="ml-auto text-right">
                 <a href="{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.list') }}" class="btn btn-outline-info">Back</a>
+
             </div>
         </div>
     </div>
@@ -39,6 +41,7 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
+
                 <form action="{{route('admin.'.$websiteShortCode.'.homefeaturemanagement.edit',[base64_encode($dataDetails->id)])}}" method="POST" class="form-horizontal" id="formadd"  >
                     @csrf
                     <div class="card-body">
@@ -83,6 +86,7 @@
                     <div class="border-top">
                         <div class="card-body">
                             <input class="btn btn-primary" type="submit" value="Create">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" class="btn btn-danger" value="Cancel">
+
                         </div>
                     </div>
                 </form>
@@ -90,6 +94,7 @@
         </div>
     </div>
 </div>
+
 
 <script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
 <script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.min.js"></script>
@@ -162,6 +167,7 @@
         }
     });
 
+
     @php 
         $product_selected = implode(',',$product_selected);
 	@endphp
@@ -201,6 +207,7 @@
     })
 
     $('#category-products').trigger('change');
+
 </script>    
 
 @endsection

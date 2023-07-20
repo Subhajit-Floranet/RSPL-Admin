@@ -25,7 +25,6 @@ class GBGHomeFeatureManagementController extends CommonController
         parent::__construct();
     }
 
-  
     public function list(Request $request){
 
         if($this->checkPermission('homefeaturemanagement','list') == false && $this->checkSuperPermission('homefeaturemanagement','list') == false ){
@@ -43,7 +42,6 @@ class GBGHomeFeatureManagementController extends CommonController
 
         return view('admin.GBG.homefeaturemanagement.list', ['result' => $result, 'category' => $category, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
-
     
     public function add(Request $request){
 
@@ -136,6 +134,7 @@ class GBGHomeFeatureManagementController extends CommonController
 
         $category = GBGCategory::all();
 
+
         // if($request->isMethod('POST')){
         //     //dd($request);
         //     $request->validate([
@@ -144,6 +143,7 @@ class GBGHomeFeatureManagementController extends CommonController
         //         'meta_title'=>'required',
         //         'meta_description'=>'required'
         //     ]);
+
             
         //     $update_arr['title'] = $request->title;
         //     $update_arr['content'] = $request->content;
@@ -154,11 +154,13 @@ class GBGHomeFeatureManagementController extends CommonController
         //     if(GBGCms::where(['id' => $request->formid])->update($update_arr)){
                    
         //         $request->session()->flash('alert-success', 'CMS successfully updated.');
+
         //         return redirect()->route('admin.gbg.cms.list');
         //     }else{
         //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
         //         return redirect()->back()->with($request->except(['_method', '_token']));
         //     }
+
         // }
 
         return view('admin.GBG.homefeaturemanagement.edit', ['product_selected' => $product_selected, 'dataDetails' => $dataDetails, 'category' => $category, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
@@ -229,4 +231,5 @@ class GBGHomeFeatureManagementController extends CommonController
             return redirect()->back();
         }
     }
+
 }
