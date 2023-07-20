@@ -53,7 +53,7 @@
                         </div>
                         <div class="form-group m-t-20">
                             <label>Image</label>
-                            <input type="file" class="form-control" id="cimage" name="cimage"  >
+                            <input type="file" class="form-control" id="cimage" name="cimage">
                             <p>Please upload minimum 1920px X 308px image only</p>
                         </div>
                         <div class="form-group m-t-20">

@@ -8,11 +8,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} HomeFeatureManagement</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} TestimonialManagement</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.add') }}" class="btn btn-success">ADD HomeFeatureManagement</a>
-
+                <a href="{{ route('admin.'.$websiteShortCode.'.testimonialmanagement.add') }}" class="btn btn-success">ADD TestimonialManagement</a>
             </div>
         </div>
     </div>
@@ -28,19 +26,15 @@
                             <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                         @endif
                     @endforeach
-
-                    <h5 class="card-title">HomeFeatureManagement</h5>
-
+                    <h5 class="card-title">TestimonialManagement</h5>
                     @if(count($result) > 0)
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 5%"><b>No.</b></th>
-                                    <th style="width: 25%"><b>Title</b></th>
-
-                                    <th style="width: 35%"><b>Category</b></th>
-
+                                    <th style="width: 25%"><b>Name</b></th>
+                                    <th style="width: 35%"><b>Content</b></th>
                                     <th style="width: 20%"><b>Created Date</b></th>
                                     <th style="width: 6%"><b>Status</b></th>
                                     <th style="width: 9%"></th>
@@ -51,17 +45,8 @@
                                 @foreach($result as $key => $data)
                                 <tr>
                                     <td>{{ $i + $key }}</td>
-                                    <td>{{$data->title}}</td>
-
-                                    <td>
-                                       @foreach($category as $cat)
-                                            @if($cat->id == $data->category_id)
-                                                {{$cat->name}}
-                                            @endif
-                                       @endforeach
-                                    </td>
-                                    <!-- <td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td> -->
-
+                                    <td>{{$data->name}}</td>
+                                    <td>{!! substr(strip_tags($data->content), 0, 100) !!}...</td>
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
                                         <label class="switch">
@@ -71,20 +56,16 @@
                                         <label id="status-info-{{ $data->id }}" class="status-stat"></label>
                                     </td>
                                     <td >
-
-                                        <a href="{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
+                                        <a href="{{ route('admin.'.$websiteShortCode.'.testimonialmanagement.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a onclick="return confirm('Are you sure you want to delete the HomefeatureManagement?')" href="{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.delete', base64_encode($data->id)) }}">
-
+                                        <a onclick="return confirm('Are you sure you want to delete the TestimonialManagement?')" href="{{ route('admin.'.$websiteShortCode.'.testimonialmanagement.delete', base64_encode($data->id)) }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
                                 </tr>
                                 @endforeach
-
-                            </tbody>
-
+                            </tfoot>
                         </table>
                     </div>
                     @else
@@ -119,7 +100,7 @@
 				status = 'N'
 			}
 			id = $(this).attr('data-id');
-			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.status') }}";	 
+			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.testimonialmanagement.status') }}";	
 			//alert(ajaxurl);
 			$.ajax({
 				type : 'POST',
