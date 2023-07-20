@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\GBGFalseUrlController;
 use App\Http\Controllers\Admin\GBGProductController;
 use App\Http\Controllers\Admin\GBGCouponController;
 use App\Http\Controllers\Admin\GBGHomeFeatureManagementController;
+use App\Http\Controllers\Admin\GBGTestimonialManagementController;
+use App\Http\Controllers\Admin\GBGAddonController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -111,6 +113,28 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::get('/deleteimage/{id}', [GBGHomeFeatureManagementController::class, 'deleteimage'])->name('deleteimage');
                 Route::any('/deleteattribute', [GBGHomeFeatureManagementController::class, 'deleteattribute'])->name('deleteattribute');
                 Route::any('/categoryproduct', [GBGHomeFeatureManagementController::class, 'categoryproduct'])->name('categoryproduct');
+            });
+
+            Route::group(['prefix' => 'testimonialmanagement', 'as' => 'testimonialmanagement.'], function () {
+                Route::any('/', [GBGTestimonialManagementController::class, 'list'])->name('list');
+                Route::any('/add', [GBGTestimonialManagementController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGTestimonialManagementController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGTestimonialManagementController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGTestimonialManagementController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGTestimonialManagementController::class, 'deleteimage'])->name('deleteimage');
+                Route::any('/deleteattribute', [GBGTestimonialManagementController::class, 'deleteattribute'])->name('deleteattribute');
+                Route::any('/categoryproduct', [GBGTestimonialManagementController::class, 'categoryproduct'])->name('categoryproduct');
+            });
+            
+            Route::group(['prefix' => 'addon', 'as' => 'addon.'], function () {
+                Route::any('/', [GBGAddonController::class, 'list'])->name('list');
+                Route::any('/add', [GBGAddonController::class, 'add'])->name('add');
+                Route::any('/edit/{id}', [GBGAddonController::class, 'edit'])->name('edit');
+                Route::get('/delete/{id}', [GBGAddonController::class, 'delete'])->name('delete');
+                Route::post('/status', [GBGAddonController::class, 'status'])->name('status');
+                Route::get('/deleteimage/{id}', [GBGAddonController::class, 'deleteimage'])->name('deleteimage');
+                Route::any('/deleteattribute', [GBGAddonController::class, 'deleteattribute'])->name('deleteattribute');
+                Route::any('/categoryproduct', [GBGAddonController::class, 'categoryproduct'])->name('categoryproduct');
             });
 
         });

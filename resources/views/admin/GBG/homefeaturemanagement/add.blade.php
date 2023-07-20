@@ -9,12 +9,19 @@
 <script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 <script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
 
+<!-- <link rel="stylesheet" type="text/css" href="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/css/select2.min.css"> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://www.germanflorist.de/js/admin/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://www.germanflorist.de/css/admin/selectpicker/bootstrap-select.css">
+<script src="https://www.germanflorist.de/js/admin/selectpicker/bootstrap-select.js"></script>
+
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">{{ strtoupper($websiteShortCode) }} GBGHomeFeatureManagement</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.cms.list') }}" class="btn btn-outline-info">Back</a>
+                <a href="{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.list') }}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
     </div>
@@ -54,7 +61,8 @@
 
                         <div class="form-group m-t-20">
                             <label>Catagory<span style="color:red;">*</span></label>
-                            <select id="category-products" name="categoty" class="form-control">
+                            <select id="category-products" name="category" class="form-control">
+                                <option value="">-Select-</option>
                                 @foreach($category as $category)
                                     <option value="{{$category->id}}" data-catid="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
@@ -63,14 +71,13 @@
                        
                         <div class="form-group m-t-20">
                             <label>Products<span style="color:red;">*</span></label>
-                            <select id="products" name="products" class="form-control category">
-                                <option value="">-Select-</option>
-                            </select>
+                            
+                            <select class="form-control selectpicker" name="product_id[]" multiple="multiple" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true"  id="product_id" ></select>
                         </div>
 
                         <div class="form-group m-t-20">
                             <label>Data Limit<span style="color:red;">*</span></label>
-                            <input type="text" class="form-control" id="data_limit" name="data_limit" placeholder="Enter Limit" readonly>
+                            <input type="text" class="form-control" id="data_limit" name="data_limit" placeholder="Enter Limit">
                         </div>
                     </div>
                     <div class="border-top">
@@ -83,6 +90,9 @@
         </div>
     </div>
 </div>
+
+<script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
+<script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
 
@@ -142,15 +152,15 @@
     }
 
 
-    $('#title').on('blur', function(){
-        var title = $.trim($(this).val());
-        if(title != ''){
-            //if($.trim($('#slug').val()) == ''){
-                $('#slug').val(title.replace(/ /g,"-").toLowerCase());
-                $('#slug-error').hide();
-            //}
-        }
-    });
+    // $('#title').on('blur', function(){
+    //     var title = $.trim($(this).val());
+    //     if(title != ''){
+    //         //if($.trim($('#slug').val()) == ''){
+    //             $('#slug').val(title.replace(/ /g,"-").toLowerCase());
+    //             $('#slug-error').hide();
+    //         //}
+    //     }
+    // });
 
     $(document).on('change', '#category-products', function(event){
         var cgnobj = this;
@@ -167,9 +177,14 @@
             success : function(response){
                 response = JSON.parse(response);
                 console.log(response);
-                if(response.status == 'success'){
-                    location.reload();
-                }
+                // if(response.status == 'success'){
+                //     location.reload();
+                // }
+
+                $('#product_id').html(response.data);
+                  
+                $('.selectpicker').selectpicker('refresh');
+
             },
             error : function(){
             }

@@ -25,6 +25,9 @@ class GBGProduct extends Model
         return $this->hasMany('App\Models\GBGProductCategory', 'product_id');
     }
 
+    
+
+
     public static function getUniqueSlug( $title, $id = 0 ) {
         // Normalize the title
         $slug = str_slug($title);

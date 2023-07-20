@@ -78,8 +78,6 @@
                                             {{$data->price}}
                                         @endif
                                     </td>
-
-                                    <td></td>
                                     
                                     
 
