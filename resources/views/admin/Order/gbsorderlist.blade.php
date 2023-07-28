@@ -8,9 +8,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Addon</h4>
+            <h4 class="page-title">GBS Order Management</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.addon.add') }}" class="btn btn-success">ADD Addon</a>
+                <a href="{{url('admin/ordermanagement/')}}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
     </div>
@@ -26,18 +26,19 @@
                             <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                         @endif
                     @endforeach
-                    <h5 class="card-title">Addon</h5>
+                    <h5 class="card-title">GBS Order Management</h5>
                     @if(count($result) > 0)
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 5%"><b>No.</b></th>
-                                    <th style="width: 25%"><b>Title</b></th>
-                                    <th style="width: 35%"><b>Price</b></th>
-                                    <th style="width: 35%"><b>Product_Type</b></th>
+                                    <th style="width: 25%"><b>Unique_Order_Id</b></th>
+                                    <th style="width: 25%"><b>Payment method</b></th>
+                                    <th style="width: 25%"><b>Payment Status</b></th>
+                                    <th style="width: 25%"><b>Order Delivery Status</b></th>
+                                    <th style="width: 25%"><b>Purchase Date</b></th>
                                     <th style="width: 20%"><b>Created Date</b></th>
-                                    <th style="width: 6%"><b>Status</b></th>
                                     <th style="width: 9%"></th>
                                 </tr>
                             </thead>
@@ -46,25 +47,36 @@
                                 @foreach($result as $key => $data)
                                 <tr>
                                     <td>{{ $i + $key }}</td>
-                                    <td>{{$data->product_name}}</td>
-                                    <td>{{$data->price}}</td>
-                                    <td>{{$data->product_type}}</td>
+                                    <td>{{$data->unique_order_id}}</td>
+
+                                    @if($data->payment_method == 1) <td>COD</td> 
+                                    @elseif($data->payment_method == 2) <td>PayPal</td> 
+                                    @elseif($data->payment_method == 3) <td>PayU</td>
+                                    @else <td>Bank Transfer</td> 
+                                    @endif
+ 
+                                    @if($data->payment_status == 'C') <td>Completed</td>
+                                    @endif
+
+                                    @if($data->order_delivery_status == 'P') <td>Pending</td>
+                                    @elseif($data->order_delivery_status == 'PC') <td>Processed</td>
+                                    @elseif($data->order_delivery_status == 'CL') <td>Cancel</td>
+                                    @elseif($data->order_delivery_status == 'H') <td>Hold</td>
+                                    @elseif($data->order_delivery_status == 'D') <td>Delivered</td>
+                                    @else <td>Shipped</td>
+                                    @endif
+                                    <td>{{date('d-m-Y', strtotime($data->purchase_date))}}</td>
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
-                                    <td>
-                                        <label class="switch">
-                                            <input type="checkbox" class="blockstatus" name="stat" id="stat" data-id="{{ base64_encode($data->id) }}" @if($data->is_block == 'N') checked @endif>
-                                            <span class="slider roundsemi"></span>
-                                        </label>
-                                        <label id="status-info-{{ $data->id }}" class="status-stat"></label>
-                                    </td>
+                                    
                                     <td >
-                                        <a href="{{ route('admin.'.$websiteShortCode.'.addon.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="">
+                                            <i class="fa fa-eye" style="font-size:20px"></i>
                                         </a>
-                                        <a onclick="return confirm('Are you sure you want to delete the Addon?')" href="{{ route('admin.'.$websiteShortCode.'.addon.delete', base64_encode($data->id)) }}">
+                                        <!-- <a href="">
                                             <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        </a> -->
                                     </td>
+                                    
                                 </tr>
                                 @endforeach
                             </tfoot>
@@ -92,38 +104,7 @@
         "order": [[5, "desc"]] 
     });
 
-    $(function(){
-        setTimeout(function(){ $('.alert').hide(); }, 3000);
-		var status, id;
-		$('.blockstatus').change(function(){
-			if(this.checked){
-				status = 'Y';
-			}else{
-				status = 'N'
-			}
-			id = $(this).attr('data-id');
-			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.addon.status') }}";	
-			//alert(ajaxurl);
-			$.ajax({
-				type : 'POST',
-				url : ajaxurl,
-				data : { 'id' : id, 'status' : status },
-				headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				success : function(response){
-					response = JSON.parse(response);
-					//alert('status-info-'+id);
-					if(response.status == 1){
-						$('#status-info-'+response.id).html(response.event).fadeIn(100).delay(1000).fadeOut();;
-					}
-				},
-				error : function(){
-					$('.selected_records_data').html('<span class="error-msg text-danger">There was an unexpected error!! Please try again later.</span>');
-				}
-			});
-		});
-    })
+    
 
     
 </script>

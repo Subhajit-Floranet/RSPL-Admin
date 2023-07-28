@@ -23,21 +23,21 @@ class GBGAddonController extends CommonController
     }
 
   
-    // public function list(Request $request){
+    public function list(Request $request){
 
-    //     if($this->checkPermission('cms','list') == false && $this->checkSuperPermission('cms','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
+        if($this->checkPermission('addon','list') == false && $this->checkSuperPermission('addon','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
 
-    //     $websiteShortCode = 'gbg';
+        $websiteShortCode = 'gbg';
 
-    //     $where = $orWhere = [];
+        $where = $orWhere = [];
 
-    //     $result = GBGCms::orderBy('created_at', 'desc')->get();
+        $result = GBGAddon::where(['product_type' => 'A'])->orderBy('created_at', 'desc')->get();
 
-    //     return view('admin.GBG.cms.list', ['result' => $result, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
-    // }
+        return view('admin.GBG.addon.list', ['result' => $result, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
+    }
 
     
     public function add(Request $request){
@@ -70,10 +70,11 @@ class GBGAddonController extends CommonController
                     mkdir(public_path() . '/uploads/addon/', 0777, true);
                 }
 
-                $imageName = 'AD-'.strtotime(now()).rand(11111,99999).'.'.$imagefile->getClientOriginalExtension();
+                $imageName = 'AD-.'.strtotime(now()).rand(11111,99999).'.'.$imagefile->getClientOriginalExtension();
                 //$imagefile->move(public_path(). \uploads\banner\, $imageName);
                 $imagefile->move(public_path() . '/uploads/addon/', $imageName);
             }
+        
 
             $addon = $obj->create([
                     'product_name' => $request->product_extra_title, 
@@ -108,7 +109,7 @@ class GBGAddonController extends CommonController
                 GBGProduct::where('id',$addon->id)->update(['sku'=>$sku]);
 
                 $request->session()->flash('alert-success', 'Addon successfully added.');
-                return redirect()->route('admin.gbg.cms.list');
+                return redirect()->route('admin.gbg.addon.list');
             }else{
                 $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
                 return redirect()->back()->with($request->except(['_method', '_token']));
@@ -119,105 +120,150 @@ class GBGAddonController extends CommonController
         return view('admin.gbg.addon.add', ['request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
 
-    // public function edit($id = null, Request $request){
+    public function edit($id = null, Request $request){
 
-    //     if($this->checkPermission('cms','list') == false && $this->checkSuperPermission('cms','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
+        if($this->checkPermission('addon','list') == false && $this->checkSuperPermission('addon','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
 
-    //     $websiteShortCode = 'gbg';
+        $websiteShortCode = 'gbg';
 
-    //     $id = base64_decode($id);
-	// 	$dataDetails  = GBGCms::where('id',$id)->first();
+        $id = base64_decode($id);
+		$dataDetails  = GBGAddon::where(['id' => $id])->first();
+        $dataDetailsimage = GBGProductImage::where(['product_id' => $id])->first();
+       
 
-    //     $obj = new GBGCms;
-
-    //     if($request->isMethod('POST')){
-    //         //dd($request);
-    //         $request->validate([
-    //             'title'=>'required',
-    //             'content'=>'required',
-    //             'meta_title'=>'required',
-    //             'meta_description'=>'required'
-    //         ]);
+        if($request->isMethod('POST')){
+            //dd($request);
+            $request->validate([
+                'product_extra_title'=>'required',
+                'product_extra_price'=>'required',
+            ]);
+            // echo $dataDetailsimage->name;
+            // die;
             
-    //         $update_arr['title'] = $request->title;
-    //         $update_arr['content'] = $request->content;
-    //         $update_arr['slug'] = $request->slug;
-    //         $update_arr['meta_title'] = $request->meta_title;
-    //         $update_arr['meta_description'] = $request->meta_description;
-
-    //         if(GBGCms::where(['id' => $request->formid])->update($update_arr)){
+            $update_arr['product_name'] = $request->product_extra_title;
+            $update_arr['price'] = $request->product_extra_price;
+            $update_arr['slug'] = str_replace(' ', '-', strtolower($request->product_extra_title));
+            $update_arr['description'] = $request->product_extra_title;
+            $update_arr['alt_key'] = $request->product_extra_title;
+            $update_arr['meta_title'] = $request->product_extra_title;
+            $update_arr['meta_description'] = $request->product_extra_title;
+           
+    
+            $imagefile=$request->file("image");
+            if (isset($imagefile)){
+                unlink(public_path() . '/uploads/addon/' . $dataDetailsimage->name);
+                $imageName = 'AD-.'.strtotime(now()).rand(11111,99999).'.'.$imagefile->getClientOriginalExtension();
+                $imagefile->move(public_path() . '/uploads/addon/', $imageName);
+                $update_image['name'] = $imageName;
+                GBGProductImage::where(['product_id' => $id])->update($update_image);
+            }
+            
+        
+            if(GBGAddon::where(['id' => $request->formid])->update($update_arr)){
                    
-    //             $request->session()->flash('alert-success', 'CMS successfully updated.');
-    //             return redirect()->route('admin.gbg.cms.list');
-    //         }else{
-    //             $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //             return redirect()->back()->with($request->except(['_method', '_token']));
-    //         }
-    //     }
+                $request->session()->flash('alert-success', 'Addon successfully updated.');
+                return redirect()->route('admin.gbg.addon.list');
+            }else{
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back()->with($request->except(['_method', '_token']));
+            }
+        }
 
-    //     return view('admin.GBG.cms.edit', ['dataDetails' => $dataDetails, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
-    // }
+        return view('admin.GBG.addon.edit', ['dataDetails' => $dataDetails, 'dataDetailsimage' => $dataDetailsimage, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
+    }
 
-    // public function delete($id = null, Request $request)
-    // {
-    //     if($this->checkPermission('cms','list') == false && $this->checkSuperPermission('cms','list') == false ){
-    //         $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
-    //         return redirect()->route('admin.home');
-    //     }
+    public function delete($id = null, Request $request)
+    {
+        if($this->checkPermission('addon','list') == false && $this->checkSuperPermission('addon','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
 
-    //     if($id == null){
-    //         return redirect()->route('admin.home');
-    //     }
-    //     $id = base64_decode($id);
+        if($id == null){
+            return redirect()->route('admin.home');
+        }
+        $id = base64_decode($id);
 
-    //     //$event_details = HomeNews::find($id);
+        $product_image = GBGProductImage::where('product_id',$id)->get('name');
+        foreach($product_image as $key => $pimage){
+          if($pimage->name != ''){
+            unlink(public_path() . '/uploads/addon/'.$pimage->name);
+          }
+          GBGProductImage::where(['product_id' => $id])->delete();
+        }
+        //$event_details = HomeNews::find($id);
 
-    //     //@unlink(public_path() . '/uploaded/event_images/' . $event_details->eimg);
+        //@unlink(public_path() . '/uploaded/event_images/' . $event_details->eimg);
 
-    //     if( GBGCms::where(['id' => $id])->delete()){
-    //         $request->session()->flash('alert-success', 'CMS deleted successfully.');
-    //         return redirect()->back();
-    //     }else{
-    //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //         return redirect()->back();
-    //     }
-    // }
+        if( GBGAddon::where(['id' => $id])->delete()){
+            $request->session()->flash('alert-success', 'Addon deleted successfully.');
+            return redirect()->back();
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
+    }
 
-    // public function status(Request $request)
-    // {
-    //     if($request->id == null || $request->status == null){
-    //         return redirect()->route('admin.dashboard');
-    //     }
-    //     $id = base64_decode($request->id);
-    //     //$block = 'N';
-    //     //$blockText = 'blocked';
-    //     switch($request->status){
-    //         case 'N':
-    //             $block = 'Y';
-    //             $blockText = 'Block';
-    //             break;
-    //         case 'Y':
-    //             $block = 'N';
-    //             $blockText = 'Unblock';
-    //             break;
-    //         default:
-    //             $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //             return redirect()->back();
-    //     }
-    //     if(GBGCms::where(['id' => $id])->update(['is_block' => $block])){
-    //         //$request->session()->flash('alert-success', 'Category successfully '.$blockText);
-    //         //return redirect()->back();
-    //         $prompt = array('status' => 1, 'id' => $id, 'event' => $blockText);
+    public function status(Request $request)
+    {
+        if($request->id == null || $request->status == null){
+            return redirect()->route('admin.dashboard');
+        }
+        $id = base64_decode($request->id);
+        //$block = 'N';
+        //$blockText = 'blocked';
+        switch($request->status){
+            case 'N':
+                $block = 'Y';
+                $blockText = 'Block';
+                break;
+            case 'Y':
+                $block = 'N';
+                $blockText = 'Unblock';
+                break;
+            default:
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back();
+        }
+        if(GBGAddon::where(['id' => $id])->update(['is_block' => $block])){
+            //$request->session()->flash('alert-success', 'Category successfully '.$blockText);
+            //return redirect()->back();
+            $prompt = array('status' => 1, 'id' => $id, 'event' => $blockText);
 
-    //         echo json_encode($prompt);
-    //     }else{
-    //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-    //         return redirect()->back();
-    //     }
-    // }
+            echo json_encode($prompt);
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
+    }
+    
+    public function deleteimage($id = null, Request $request){
+        if($this->checkPermission('addon','list') == false && $this->checkSuperPermission('addon','list') == false ){
+            $request->session()->flash('alert-danger', "You don't have permissions to access this page.");
+            return redirect()->route('admin.home');
+        }
+        
+        $websiteShortCode = 'gbg';
+
+        if($id == null){
+            return redirect()->route('admin.home');
+        }
+        $id = base64_decode($id);
+        $dataDetails  = GBGProductImage::find($id);
+        unlink(public_path() . '/uploads/addon/'.$dataDetails->name);
+
+        if(GBGProductImage::where(['id' => $id])->delete()){
+            $request->session()->flash('alert-success', 'Addon image deleted successfully.');
+            return redirect()->back();
+        }else{
+            $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+            return redirect()->back();
+        }
+        
+    }
 
     public function generate_sku($request){
         $formated_number = '';

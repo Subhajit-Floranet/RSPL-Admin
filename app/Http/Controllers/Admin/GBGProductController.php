@@ -39,8 +39,8 @@ class GBGProductController extends CommonController
         $where = $orWhere = [];
 
         //DB::enableQueryLog();
-            
         $result = GBGProduct::select('id', 'product_name','price', 'fnid', 'is_block', 'has_attribute', 'created_at')->orderBy('id', 'DESC')->get();
+        //DB::enableQueryLog();
         $category_data = GBGCategory::all();
         return view('admin.GBG.product.list', ['result' => $result, 'category_data' => $category_data, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }

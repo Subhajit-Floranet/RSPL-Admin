@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\GBGCouponController;
 use App\Http\Controllers\Admin\GBGHomeFeatureManagementController;
 use App\Http\Controllers\Admin\GBGTestimonialManagementController;
 use App\Http\Controllers\Admin\GBGAddonController;
+use App\Http\Controllers\Admin\OrderManagementController;
+use App\Http\Controllers\Admin\ContactManagementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -137,6 +139,18 @@ Route::prefix('admin')->name('admin.')->group(function(){
                 Route::any('/categoryproduct', [GBGAddonController::class, 'categoryproduct'])->name('categoryproduct');
             });
 
+        });
+
+        Route::group(['prefix' => 'ordermanagement', 'as' => 'ordermanagement'],function(){
+            Route::get('/',[OrderManagementController::class, 'order'])->name('order');
+            Route::any('/allorder',[OrderManagementController::class, 'allorder'])->name('allorder');
+            // Route::get('/gbgorder',[OrderManagementController::class, 'gbgorder'])->name('gbgorder');
+            // Route::get('/gbsorder',[OrderManagementController::class, 'gbsorder'])->name('gbsorder');
+        });
+        Route::group(['prefix' => 'contactmanagement', 'as' => 'contactmanagement'],function(){
+            Route::get('/',[ContactManagementController::class, 'contact'])->name('contact');
+            Route::any('/allcontact',[ContactManagementController::class, 'allcontact'])->name('allcontact');
+            Route::post('/status', [ContactManagementController::class, 'status'])->name('status');
         });
     });
 });

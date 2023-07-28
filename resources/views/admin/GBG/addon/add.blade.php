@@ -32,7 +32,7 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
-                <form action="{{route('admin.'.$websiteShortCode.'.addon.add')}}" method="POST" class="form-horizontal" id="formadd"  >
+                <form action="{{route('admin.'.$websiteShortCode.'.addon.add')}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <h4 class="card-title">Addon Add</h4>

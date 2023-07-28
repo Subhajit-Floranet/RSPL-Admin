@@ -8,9 +8,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Product</h4>
+            <h4 class="page-title">Contact Management</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.product.add') }}" class="btn btn-success">ADD Product</a>
+                <a href="{{url('/admin/contactmanagement/')}}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
     </div>
@@ -26,78 +26,53 @@
                             <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                         @endif
                     @endforeach
-                    <h5 class="card-title">Product</h5>
+                    <h5 class="card-title">ContactManagement</h5>
                     @if(count($result) > 0)
-                    
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 5%"><b>No.</b></th>
-                                    <th style="width: 35%"><b>Image</b></th>
-                                    <th style="width: 35%"><b>Title</b></th>
-                                    <th style="width: 5%"><b>SKU</b></th>
-                                    <th style="width: 5%"><b>Category</b></th>
-                                    <th style="width: 5%"><b>Price/Attribute</b></th>
-                                    <th style="width: 20%"><b>Created At</b></th>
+                                    <th style="width: 25%"><b>Name</b></th>
+                                    <th style="width: 25%"><b>Email</b></th>
+                                    <th style="width: 25%"><b>Query Related</b></th>
+                                    <th style="width: 25%"><b>Ticket ID</b></th>
+                                    <th style="width: 25%"><b>SITENAME</b></th>
+                                    <th style="width: 20%"><b>Created Date</b></th>
                                     <th style="width: 6%"><b>Status</b></th>
                                     <th style="width: 9%"></th>
-                                
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $i=1; @endphp
                                 @foreach($result as $key => $data)
                                 <tr>
-                                    <td>{{$key + 1}}</td>
-                                    <td>
-                                        {{$data->default_product_image}}
-                                    </td>
-                                    <td>{{$data->product_name}}</td>
-                                    <td>{{$data->id}} / {{$data->fnid}}</td>
-
-                                    <td>  @if(count($data->default_product_category) > 0)
-                                            @foreach($data->default_product_category as $category)
-                                                {{$category_data[($category->category_id)-1]->name}}
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    
-                                    <td>
-                                        @if($data->has_attribute == "Y")
-                                            @if(count($data->product_attribute) > 0)
-                                                @foreach($data->product_attribute as $attribute)
-                                                    {{$attribute->title}} <b>USD {{$attribute->price}}</b> <br>    
-                                                @endforeach
-                                            @endif
-
-                                        @else
-                                            {{$data->price}}
-                                        @endif
-                                    </td>
-                                    
-                                    
-
-                                   
+                                    <td>{{ $i + $key }}</td>
+                                    <td>{{$data->name}}</td>
+                                    <td>{{$data->email}}</td>
+                                    <td>{{$data->query_related}}</td>
+                                    <td>{{$data->ticket_id}}</td>
+                                    <td>{{$data->sitename}}</td>
                                     <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
                                     <td>
                                         <label class="switch">
-                                            <input type="checkbox" class="blockstatus" name="stat" id="stat" data-id="{{ base64_encode($data->id) }}" @if($data->is_block == 'N') checked @endif>
+                                            <input type="checkbox" class="blockstatus" name="stat" id="stat" data-id="{{ base64_encode($data->id) }}" data-sitename="{{$data->sitename}}" @if($data->is_block == 'N') checked @endif>
                                             <span class="slider roundsemi"></span>
                                         </label>
                                         <label id="status-info-{{ $data->id }}" class="status-stat"></label>
                                     </td>
                                     <td >
-                                        <a href="{{ route('admin.'.$websiteShortCode.'.product.edit', base64_encode($data->id).'?redirect='.urlencode($request->fullUrl())) }}">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="">
+                                            <i class="fa fa-eye" style="font-size:20px"></i>
                                         </a>
-                                        <a onclick="return confirm('Are you sure you want to delete the product?')" href="{{ route('admin.'.$websiteShortCode.'.product.delete', base64_encode($data->id)) }}">
+                                        <!-- <a href="">
                                             <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        </a> -->
                                     </td>
+                                    
                                 </tr>
                                 @endforeach
-                            </tbody>
+                            </tfoot>
                         </table>
                     </div>
                     @else
@@ -119,9 +94,9 @@
      *       Basic Table                   *
      ****************************************/
     $('#zero_config').DataTable({
-        "order": [[7, "desc"]] 
+        "order": [[5, "desc"]] 
     });
-
+    
     $(function(){
         setTimeout(function(){ $('.alert').hide(); }, 3000);
 		var status, id;
@@ -132,22 +107,21 @@
 				status = 'N'
 			}
 			id = $(this).attr('data-id');
-			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.product.status') }}";	
+            sitename = $(this).attr('data-sitename');
+            var ajaxurl = "{{url('/admin/contactmanagement/status')}}";	
 			//alert(ajaxurl);
 			$.ajax({
 				type : 'POST',
 				url : ajaxurl,
-				data : { 'id' : id, 'status' : status },
+				data : { 'id' : id, 'sitename' : sitename, 'status' : status },
 				headers: {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				success : function(response){
-                    //console.log(response);
-					response = JSON.parse(response);//convert the json data into string
-
+					response = JSON.parse(response);
 					//alert('status-info-'+id);
 					if(response.status == 1){
-						$('#status-info-'+response.id).html(response.event).fadeIn(100).delay(1000).fadeOut();
+						$('#status-info-'+response.id).html(response.event).fadeIn(100).delay(1000).fadeOut();;
 					}
 				},
 				error : function(){
@@ -156,7 +130,6 @@
 			});
 		});
     })
-
     
 </script>
 
