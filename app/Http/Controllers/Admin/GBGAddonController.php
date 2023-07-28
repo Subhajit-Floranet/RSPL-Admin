@@ -23,6 +23,7 @@ class GBGAddonController extends CommonController
     }
 
   
+
     public function list(Request $request){
 
         if($this->checkPermission('addon','list') == false && $this->checkSuperPermission('addon','list') == false ){
@@ -38,6 +39,7 @@ class GBGAddonController extends CommonController
 
         return view('admin.GBG.addon.list', ['result' => $result, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
+
 
     
     public function add(Request $request){
@@ -75,6 +77,7 @@ class GBGAddonController extends CommonController
                 $imagefile->move(public_path() . '/uploads/addon/', $imageName);
             }
         
+
 
             $addon = $obj->create([
                     'product_name' => $request->product_extra_title, 

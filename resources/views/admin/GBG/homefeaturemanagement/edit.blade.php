@@ -201,6 +201,7 @@
     })
 
     $('#category-products').trigger('change');
+
 </script>    
 
 @endsection

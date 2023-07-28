@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\GBGTestimonialManagementController;
 use App\Http\Controllers\Admin\GBGAddonController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\ContactManagementController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -151,6 +152,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::get('/',[ContactManagementController::class, 'contact'])->name('contact');
             Route::any('/allcontact',[ContactManagementController::class, 'allcontact'])->name('allcontact');
             Route::post('/status', [ContactManagementController::class, 'status'])->name('status');
+
         });
     });
 });

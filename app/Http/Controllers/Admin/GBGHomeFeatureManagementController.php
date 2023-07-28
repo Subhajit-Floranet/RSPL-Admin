@@ -25,7 +25,6 @@ class GBGHomeFeatureManagementController extends CommonController
         parent::__construct();
     }
 
-  
     public function list(Request $request){
 
         if($this->checkPermission('homefeaturemanagement','list') == false && $this->checkSuperPermission('homefeaturemanagement','list') == false ){
@@ -43,7 +42,6 @@ class GBGHomeFeatureManagementController extends CommonController
 
         return view('admin.GBG.homefeaturemanagement.list', ['result' => $result, 'category' => $category, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
-
     
     public function add(Request $request){
 
@@ -137,6 +135,7 @@ class GBGHomeFeatureManagementController extends CommonController
         $category = GBGCategory::all();
 
 
+
         if($request->isMethod('POST')){
             //dd($request);
             $request->validate([
@@ -180,6 +179,7 @@ class GBGHomeFeatureManagementController extends CommonController
             }
 
         }
+
 
         return view('admin.GBG.homefeaturemanagement.edit', ['product_selected' => $product_selected, 'dataDetails' => $dataDetails, 'category' => $category, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }

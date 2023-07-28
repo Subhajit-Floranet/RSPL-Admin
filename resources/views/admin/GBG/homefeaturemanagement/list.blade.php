@@ -107,7 +107,6 @@
 				status = 'N'
 			}
 			id = $(this).attr('data-id');
-
 			var ajaxurl = "{{ route('admin.'.$websiteShortCode.'.homefeaturemanagement.status') }}";	 
 			//alert(ajaxurl);
 			$.ajax({

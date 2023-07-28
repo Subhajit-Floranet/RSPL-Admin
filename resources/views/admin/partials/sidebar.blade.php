@@ -15,7 +15,6 @@
                         <li class="sidebar-item"><a href="{{route('admin.gbg.testimonialmanagement.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Testimonial Management</span></a></li>
                         <li class="sidebar-item"><a href="{{route('admin.gbg.homefeaturemanagement.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">HomeFeature Management</span></a></li>
                         <li class="sidebar-item"><a href="{{route('admin.gbg.addon.list')}}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">Addon Management</span></a></li>
-   
                     </ul>
                 </li>
 
