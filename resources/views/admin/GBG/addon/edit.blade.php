@@ -12,9 +12,9 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} CMS</h4>
+            <h4 class="page-title">{{ strtoupper($websiteShortCode) }} Addon</h4>
             <div class="ml-auto text-right">
-                <a href="{{ route('admin.'.$websiteShortCode.'.cms.list') }}" class="btn btn-outline-info">Back</a>
+                <a href="{{ route('admin.'.$websiteShortCode.'.addon.list') }}" class="btn btn-outline-info">Back</a>
             </div>
         </div>
     </div>
@@ -32,32 +32,32 @@
                         <h4 class="font-weight-light alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</h4>
                     @endif
                 @endforeach
-                <form action="{{route('admin.'.$websiteShortCode.'.cms.edit', [base64_encode($dataDetails->id)])}}" method="POST" class="form-horizontal" id="formadd"  >
+                <form action="{{route('admin.'.$websiteShortCode.'.addon.edit',[base64_encode($dataDetails->id)])}}" method="POST" class="form-horizontal" id="formadd" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
-                        <h4 class="card-title">Cms Edit</h4>
+                        <h4 class="card-title">Addon Edit</h4>
                         
-                        <input type="hidden" name="formid" value="<?php echo $dataDetails->id; ?>">
+                        <input type="hidden" name="formid" value="<?php echo $dataDetails->id; ?>"/>
 
                         <div class="form-group m-t-20">
-                            <label>Title</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title" value="{{$dataDetails->title}}" required>
+                            <label>Image<span style="color:red;">*</span></label>
+                            <input type="file" class="form-control" id="image" name="image">
+                            <p>Please upload image exactly or larger than 100px X 100px for best view</p>
+                            @if($dataDetailsimage)
+                                @if($dataDetailsimage->name!='')
+                                    <img src="{{asset('uploads/addon/'.$dataDetailsimage->name)}}" style="width: 30%; height: 100px">&nbsp;&nbsp;<a href="{{route('admin.'.$websiteShortCode.'.addon.deleteimage', [base64_encode($dataDetailsimage->id)])}}" class="btn btn-danger">Delete Image</a>
+                                @endif
+                            @endif
                         </div>
+
                         <div class="form-group m-t-20">
-                            <label>Content</label>
-                            <textarea class="form-control" rows="5" id="postcontent" name="content" placeholder="Enter Content" required>{{$dataDetails->content}}</textarea>
+                            <label>Product Extra Title<span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" id="product_extra_title" name="product_extra_title" value="{{$dataDetails->product_name}}" placeholder="Enter Product Extra Title" required>
                         </div>
+                        
                         <div class="form-group m-t-20">
-                            <label>Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug" placeholder="Enter Slug" value="{{$dataDetails->slug}}" readonly>
-                        </div>
-                        <div class="form-group m-t-20">
-                            <label>Meta Title</label>
-                            <input type="text" class="form-control" id="meta_title" name="meta_title" placeholder="Enter Meta Title" value="{{$dataDetails->meta_title}}" required>
-                        </div>
-                        <div class="form-group m-t-20">
-                            <label>Meta Description</label>
-                            <textarea class="form-control" rows="5" id="meta_description" name="meta_description" placeholder="Enter Meta Description" required>{{$dataDetails->meta_description}}</textarea>
+                            <label>Product Extra Price<span style="color:red;">*</span></label>
+                            <input type="number" class="form-control" id="product_extra_price" name="product_extra_price" value="{{$dataDetails->price}}" placeholder="Enter price" required>
                         </div>
                         
                     </div>

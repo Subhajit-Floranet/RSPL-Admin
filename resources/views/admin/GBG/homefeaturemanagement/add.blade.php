@@ -8,15 +8,12 @@
 
 <script src="https://www.giftbasketworldwide.com/js/admin/misc.js"></script>
 <script src="https://www.giftbasketworldwide.com/js/admin/tinymce.min.js"></script>
-
-
 <!-- <link rel="stylesheet" type="text/css" href="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/css/select2.min.css"> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://www.germanflorist.de/js/admin/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://www.germanflorist.de/css/admin/selectpicker/bootstrap-select.css">
 <script src="https://www.germanflorist.de/js/admin/selectpicker/bootstrap-select.js"></script>
-
 
 <div class="page-breadcrumb">
     <div class="row">
@@ -68,7 +65,6 @@
 
                             <select id="category-products" name="category" class="form-control">
                                 <option value="">-Select-</option>
-
                                 @foreach($category as $category)
                                     <option value="{{$category->id}}" data-catid="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
@@ -77,7 +73,6 @@
                        
                         <div class="form-group m-t-20">
                             <label>Products<span style="color:red;">*</span></label>
-
                             
                             <select class="form-control selectpicker" name="product_id[]" multiple="multiple" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true"  id="product_id" ></select>
 
@@ -85,7 +80,6 @@
 
                         <div class="form-group m-t-20">
                             <label>Data Limit<span style="color:red;">*</span></label>
-
                             <input type="text" class="form-control" id="data_limit" name="data_limit" placeholder="Enter Limit">
 
                         </div>
@@ -104,7 +98,6 @@
 
 <script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.full.min.js"></script>
 <script src="http://localhost/RFPL-admin/public/admin/assets/libs/select2/dist/js/select2.min.js"></script>
-
 
 <script type="text/javascript">
 
@@ -175,7 +168,6 @@
     //     }
     // });
 
-
     $(document).on('change', '#category-products', function(event){
         var cgnobj = this;
         var catid = $(this).val();
@@ -191,7 +183,6 @@
             success : function(response){
                 response = JSON.parse(response);
                 console.log(response);
-
                 // if(response.status == 'success'){
                 //     location.reload();
                 // }

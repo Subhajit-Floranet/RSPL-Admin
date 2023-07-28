@@ -135,33 +135,51 @@ class GBGHomeFeatureManagementController extends CommonController
         $category = GBGCategory::all();
 
 
-        // if($request->isMethod('POST')){
-        //     //dd($request);
-        //     $request->validate([
-        //         'title'=>'required',
-        //         'content'=>'required',
-        //         'meta_title'=>'required',
-        //         'meta_description'=>'required'
-        //     ]);
+
+        if($request->isMethod('POST')){
+            //dd($request);
+            $request->validate([
+                'title'=>'required',
+                'description'=>'required',
+                'category'=>'required',
+                'data_limit'=>'required'
+            ]);
+
+            $category_id = GBGHomeFeatureManagement::where('id',$id)->get(['category_id']);
+            foreach($category_id as $key => $cat_id){
+                $deletecategoryproduct = GBGHomePageProduct::where(['cat_id' => $cat_id->category_id])->delete();
+            }
+            
+
+            $update_arr['title'] = $request->title;
+            $update_arr['description'] = $request->description;
+            $update_arr['slug'] = $request->slug;
+            $update_arr['category_id'] = $request->category;
+            $update_arr['data_limit'] = $request->data_limit;
+
+            if((isset($request->product_id) && count($request->product_id)>0) && $update_arr){
+                foreach($request->product_id as $pid){
+                    $home_page_categories['cat_id'] = $request->category;
+                    $home_page_categories['product_id'] = $pid;
+                   // $home_page_categories['sort'] = $a;
+                    GBGHomePageProduct::create($home_page_categories);
+                }
+            }
+           
 
             
-        //     $update_arr['title'] = $request->title;
-        //     $update_arr['content'] = $request->content;
-        //     $update_arr['slug'] = $request->slug;
-        //     $update_arr['meta_title'] = $request->meta_title;
-        //     $update_arr['meta_description'] = $request->meta_description;
-
-        //     if(GBGCms::where(['id' => $request->formid])->update($update_arr)){
+            if(GBGHomeFeatureManagement::where(['id' => $request->formid])->update($update_arr)){
                    
-        //         $request->session()->flash('alert-success', 'CMS successfully updated.');
+                $request->session()->flash('alert-success', 'GBGHomeFeatureManagement successfully updated.');
 
-        //         return redirect()->route('admin.gbg.cms.list');
-        //     }else{
-        //         $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
-        //         return redirect()->back()->with($request->except(['_method', '_token']));
-        //     }
+                return redirect()->route('admin.gbg.homefeaturemanagement.list');
+            }else{
+                $request->session()->flash('alert-danger', 'Sorry! There was an unexpected error. Try again!');
+                return redirect()->back()->with($request->except(['_method', '_token']));
+            }
 
-        // }
+        }
+
 
         return view('admin.GBG.homefeaturemanagement.edit', ['product_selected' => $product_selected, 'dataDetails' => $dataDetails, 'category' => $category, 'request' => $request, 'websiteShortCode' => $websiteShortCode]);
     }
@@ -231,5 +249,4 @@ class GBGHomeFeatureManagementController extends CommonController
             return redirect()->back();
         }
     }
-
 }
