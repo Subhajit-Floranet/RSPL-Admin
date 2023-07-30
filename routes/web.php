@@ -152,6 +152,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::get('/',[ContactManagementController::class, 'contact'])->name('contact');
             Route::any('/allcontact',[ContactManagementController::class, 'allcontact'])->name('allcontact');
             Route::post('/status', [ContactManagementController::class, 'status'])->name('status');
+            Route::get('/edit/{id}/{sitename}', [ContactManagementController::class, 'edit'])->name('edit');
+
 
         });
     });
