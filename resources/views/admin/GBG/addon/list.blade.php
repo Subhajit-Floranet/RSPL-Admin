@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-
+{{-- comment in addonlist --}}
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
