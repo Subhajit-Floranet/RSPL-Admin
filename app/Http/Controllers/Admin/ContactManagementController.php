@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\GBGCms;
 use App\Models\GBGContact;
 use App\Models\GBSContact;
-<<<<<<< HEAD
-=======
 use App\Models\GBSContactConversation;
 use App\Models\GBGContactConversation;
->>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -103,8 +100,7 @@ class ContactManagementController extends CommonController
         }
        
     }
-<<<<<<< HEAD
-=======
+
 
     public function edit(Request $request){
         $id = $request->id;
@@ -127,5 +123,5 @@ class ContactManagementController extends CommonController
         
         
     }
->>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
+
 }
