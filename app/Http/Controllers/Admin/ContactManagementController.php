@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\GBGCms;
 use App\Models\GBGContact;
 use App\Models\GBSContact;
+<<<<<<< HEAD
+=======
+use App\Models\GBSContactConversation;
+use App\Models\GBGContactConversation;
+>>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
@@ -98,4 +103,29 @@ class ContactManagementController extends CommonController
         }
        
     }
+<<<<<<< HEAD
+=======
+
+    public function edit(Request $request){
+        $id = $request->id;
+        $sitename = $request->sitename;
+        if($sitename == "gbg"){
+            $result1 = GBGContact::where(['id' => $id])->get();
+            $result2 = GBGContactConversation::where(['contact_id' => $id])->first();
+            foreach($result1 as $result){
+                return view('admin.Contact.allcontactedit',['result' => $result, 'result2' => $result2, 'request' => $request]);
+            }
+           
+        }
+        else{
+            $result1 = GBSContact::where(['id' => $id])->get();
+            $result2 = GBGContactConversation::where(['contact_id' => $id])->get();
+            foreach($result1 as $result){
+                return view('admin.Contact.allcontactedit',['result' => $result, 'result2' => $result2, 'request' => $request]);
+            }
+        }
+        
+        
+    }
+>>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
 }

@@ -62,7 +62,11 @@
                                         <label id="status-info-{{ $data->id }}" class="status-stat"></label>
                                     </td>
                                     <td >
+<<<<<<< HEAD
                                         <a href="">
+=======
+                                        <a href="{{url('/admin/contactmanagement/edit')}}/{{$data->id}}/{{$data->sitename}}">
+>>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
                                             <i class="fa fa-eye" style="font-size:20px"></i>
                                         </a>
                                         <!-- <a href="">

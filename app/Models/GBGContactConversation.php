@@ -4,14 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GBGContact extends Model
+class GBGContactConversation extends Model
 {
-    protected $table = 'contacts';
+    protected $table = 'contact_conversations';
     protected $connection = "mysqlgbg";
     protected $guarded = [];
-<<<<<<< HEAD
-=======
-
-   
->>>>>>> 9e0afbddd72e1ec9dc02e9ba5d4e145cae1dc05b
 }
